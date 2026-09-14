@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #060913;
+    --bg-card: rgba(13, 20, 36, 0.7);
+    --border-card: rgba(255, 255, 255, 0.08);
+    --neon-cyan: #06b6d4;
+    --neon-purple: #8b5cf6;
+    --neon-pink: #ec4899;
+    --neon-green: #10b981;
+    --neon-amber: #f59e0b;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: #f1f5f9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.14) 0%, transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.25);
+}
+
+/* Equalizer audio bar animations */
+@keyframes bounce-bar-1 {
+  0%, 100% { height: 20%; }
+  50% { height: 90%; }
+}
+@keyframes bounce-bar-2 {
+  0%, 100% { height: 50%; }
+  50% { height: 25%; }
+}
+@keyframes bounce-bar-3 {
+  0%, 100% { height: 80%; }
+  50% { height: 35%; }
+}
+@keyframes bounce-bar-4 {
+  0%, 100% { height: 30%; }
+  50% { height: 95%; }
+}
+@keyframes bounce-bar-5 {
+  0%, 100% { height: 70%; }
+  50% { height: 40%; }
+}
+
+.eq-bar-1 { animation: bounce-bar-1 0.7s ease-in-out infinite; }
+.eq-bar-2 { animation: bounce-bar-2 0.85s ease-in-out infinite; }
+.eq-bar-3 { animation: bounce-bar-3 0.65s ease-in-out infinite; }
+.eq-bar-4 { animation: bounce-bar-4 0.9s ease-in-out infinite; }
+.eq-bar-5 { animation: bounce-bar-5 0.75s ease-in-out infinite; }
+
+/* Glowing text */
+.text-glow-cyan {
+  text-shadow: 0 0 16px rgba(6, 182, 212, 0.6);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 16px rgba(139, 92, 246, 0.6);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060913;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

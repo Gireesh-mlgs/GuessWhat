@@ -1,0 +1,224 @@
+{
+  "catalog_version": "1.0.0",
+  "published_date": "2026-09-13",
+  "provider": "SongSprint Synthetic & CC-BY Audio Lab",
+  "compliance_statement": "All recordings are generated or licensed under Creative Commons CC0 / CC-BY 4.0 or royalty-free public domain permissions. No commercial recordings are scraped, downloaded, or cached without rights.",
+  "tracks": [
+    {
+      "id": "song-01",
+      "canonical_title": "Neon Horizon",
+      "primary_artist": "CyberVibe",
+      "genre": "Electronic",
+      "subgenre": "Synthwave",
+      "difficulty_tier": "Easy",
+      "audio_file": "/audio/neon_horizon.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.98,
+        "hook_description": "Catchy synth arpeggio and punchy four-on-the-floor kick"
+      },
+      "aliases": ["Neon Horizons", "Cyber Vibe - Neon Horizon", "Neon Horizon (Original Mix)"]
+    },
+    {
+      "id": "song-02",
+      "canonical_title": "Midnight City Lights",
+      "primary_artist": "Luna Ray",
+      "genre": "Pop",
+      "subgenre": "Dance Pop",
+      "difficulty_tier": "Easy",
+      "audio_file": "/audio/midnight_city_lights.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.95,
+        "hook_description": "Bright piano stabs and melodic lead hook"
+      },
+      "aliases": ["Midnight Lights", "City Lights", "Midnight City Light"]
+    },
+    {
+      "id": "song-03",
+      "canonical_title": "Thunder Strike",
+      "primary_artist": "Iron Voltage",
+      "genre": "Rock",
+      "subgenre": "Hard Rock",
+      "difficulty_tier": "Medium",
+      "audio_file": "/audio/thunder_strike.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.94,
+        "hook_description": "Overdriven electric guitar power chord riff with live rock drums"
+      },
+      "aliases": ["Thunderstrike", "Iron Voltage Thunder Strike"]
+    },
+    {
+      "id": "song-04",
+      "canonical_title": "Celestial Odyssey",
+      "primary_artist": "Aurelius Symphony",
+      "genre": "Soundtrack",
+      "subgenre": "Cinematic Orchestral",
+      "difficulty_tier": "Medium",
+      "audio_file": "/audio/celestial_odyssey.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.92,
+        "hook_description": "Dramatic string swell, brass horn stabs, and heavy timpani"
+      },
+      "aliases": ["Celestial Odysseys", "Odyssey by Aurelius"]
+    },
+    {
+      "id": "song-05",
+      "canonical_title": "Coffee Shop Rain",
+      "primary_artist": "Lofi Dreamer",
+      "genre": "Hip-Hop",
+      "subgenre": "Lo-Fi Beats",
+      "difficulty_tier": "Easy",
+      "audio_file": "/audio/coffee_shop_rain.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.96,
+        "hook_description": "Vintage Rhodes electric piano chords with vinyl texture"
+      },
+      "aliases": ["Coffee Shop Rainy Day", "Rainy Coffee Shop", "Coffee Rain"]
+    },
+    {
+      "id": "song-06",
+      "canonical_title": "Starlight Disco",
+      "primary_artist": "Chrome Boulevard",
+      "genre": "Pop",
+      "subgenre": "Nu-Disco / Funk",
+      "difficulty_tier": "Medium",
+      "audio_file": "/audio/starlight_disco.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.93,
+        "hook_description": "Funky syncopated slap bass with disco string chords"
+      },
+      "aliases": ["Starlight Disco Club", "Chrome Blvd Starlight"]
+    },
+    {
+      "id": "song-07",
+      "canonical_title": "Shadow Runner",
+      "primary_artist": "NeuroDyne",
+      "genre": "Electronic",
+      "subgenre": "Cyberpunk Industrial",
+      "difficulty_tier": "Hard",
+      "audio_file": "/audio/shadow_runner.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.91,
+        "hook_description": "Aggressive analog reese bass with fast sixteenth arp"
+      },
+      "aliases": ["Shadowrunner", "NeuroDyne - Shadow Runner"]
+    },
+    {
+      "id": "song-08",
+      "canonical_title": "Summer Breeze",
+      "primary_artist": "Meadow & Pine",
+      "genre": "Acoustic",
+      "subgenre": "Indie Folk",
+      "difficulty_tier": "Easy",
+      "audio_file": "/audio/summer_breeze.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.97,
+        "hook_description": "Acoustic guitar strumming with cheerful folk flute lead"
+      },
+      "aliases": ["Summer Breezes", "Meadow and Pine Summer Breeze"]
+    },
+    {
+      "id": "song-09",
+      "canonical_title": "Carnaval de Rio",
+      "primary_artist": "Sambafunk Allstars",
+      "genre": "World",
+      "subgenre": "Latin Samba",
+      "difficulty_tier": "Hard",
+      "audio_file": "/audio/carnaval_de_rio.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.90,
+        "hook_description": "Syncopated Brazilian batucada percussion with trumpet brass stabs"
+      },
+      "aliases": ["Carnaval Do Rio", "Carnival de Rio", "Samba De Rio"]
+    },
+    {
+      "id": "song-10",
+      "canonical_title": "Moonlight Sonata (Trap Remix)",
+      "primary_artist": "Amadeus Beat",
+      "genre": "Electronic",
+      "subgenre": "Classical Trap",
+      "difficulty_tier": "Expert",
+      "audio_file": "/audio/moonlight_sonata_remix.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.88,
+        "hook_description": "Iconic Beethoven Moonlight Sonata piano triplet arpeggios over 808 sub"
+      },
+      "aliases": ["Moonlight Sonata Remix", "Beethoven Trap Remix", "Amadeus Moonlight Trap"]
+    },
+    {
+      "id": "song-11",
+      "canonical_title": "Deep Abyss",
+      "primary_artist": "Solar Echoes",
+      "genre": "Ambient",
+      "subgenre": "Space Chill",
+      "difficulty_tier": "Impossible",
+      "audio_file": "/audio/deep_abyss.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.85,
+        "hook_description": "Slowly shifting celestial pad textures with resonant chime reflections"
+      },
+      "aliases": ["The Deep Abyss", "Solar Echoes Deep Abyss"]
+    },
+    {
+      "id": "song-12",
+      "canonical_title": "Velocity Rush",
+      "primary_artist": "SubSonic Force",
+      "genre": "Electronic",
+      "subgenre": "Drum and Bass",
+      "difficulty_tier": "Expert",
+      "audio_file": "/audio/velocity_rush.wav",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "editorial_clip": {
+        "start_ms": 0,
+        "max_duration_ms": 5000,
+        "fairness_rating": 0.87,
+        "hook_description": "174 BPM rolling breakbeat drums with sub-bass distortion and fast leads"
+      },
+      "aliases": ["Velocity Rush DnB", "Subsonic Force Velocity"]
+    }
+  ]
+}
