@@ -22,17 +22,17 @@ export function TierSelector({
   const tiers: DifficultyTier[] = ['Easy', 'Medium', 'Hard', 'Expert', 'Impossible'];
 
   return (
-    <div className="w-full max-w-lg glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6 animate-in fade-in">
+    <div className="w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-[0_10px_35px_rgba(245,158,11,0.12)] space-y-6 animate-in fade-in">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">
-          <Zap className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-200 border-2 border-amber-400 text-amber-950 text-xs font-black uppercase tracking-wider">
+          <Zap className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
           Choose Your Stakes
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
           Select Difficulty
         </h2>
-        <p className="text-xs sm:text-sm text-slate-400">
-          Tier is locked for your entire {modeLabel} run. Higher tiers award bigger score multipliers!
+        <p className="text-xs sm:text-sm text-slate-600 font-bold">
+          Tier is locked for your {modeLabel} run. Higher tiers award bigger score multipliers!
         </p>
       </div>
 
@@ -45,35 +45,35 @@ export function TierSelector({
             <div
               key={tier}
               onClick={() => onSelectTier(tier)}
-              className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-start justify-between gap-4 ${
+              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start justify-between gap-4 ${
                 isSelected
-                  ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-400 ring-2 ring-cyan-500/30 shadow-lg shadow-cyan-500/10'
-                  : 'bg-slate-900/50 border-white/5 hover:border-white/20 hover:bg-slate-900/80 text-slate-400'
+                  ? 'bg-amber-100/80 border-amber-500 ring-4 ring-amber-300/80 shadow-xs'
+                  : 'bg-white border-amber-200 hover:border-amber-300 hover:bg-amber-50/60 text-slate-700'
               }`}
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className={`font-black text-base ${isSelected ? 'text-white' : 'text-slate-200'}`}>
+                  <span className={`font-black text-base ${isSelected ? 'text-amber-950' : 'text-slate-800'}`}>
                     {tier}
                   </span>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-black ${
                       isSelected
-                        ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/40'
-                        : 'bg-slate-800 text-slate-400'
+                        ? 'bg-amber-400 text-slate-950 border border-amber-500/40 shadow-xs'
+                        : 'bg-amber-100 text-amber-900'
                     }`}
                   >
                     {info.multiplier}× Multiplier
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-600 font-semibold leading-relaxed">
                   {info.description}
                 </p>
               </div>
 
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center mt-0.5 flex-shrink-0 ${
-                  isSelected ? 'border-cyan-400 bg-cyan-400' : 'border-slate-700 bg-slate-900'
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${
+                  isSelected ? 'border-amber-500 bg-amber-400' : 'border-amber-300 bg-white'
                 }`}
               >
                 {isSelected && <div className="w-2 h-2 rounded-full bg-slate-950" />}
@@ -87,14 +87,14 @@ export function TierSelector({
         <button
           onClick={onConfirm}
           disabled={isLoading}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-base flex items-center justify-center gap-2 shadow-xl shadow-cyan-500/25 transition-all transform active:scale-[0.99]"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black text-base flex items-center justify-center gap-2 shadow-md shadow-amber-400/30 border-2 border-amber-500/40 btn-tactile"
         >
-          <span>Lock In & Start Sprint</span>
+          <span>Lock In & Start Sprint ⚡</span>
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500">
-        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="flex items-center justify-center gap-2 text-[11px] text-amber-900/80 font-bold">
+        <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
         <span>Server-verified fair scoring snapshot version 1.0</span>
       </div>
     </div>

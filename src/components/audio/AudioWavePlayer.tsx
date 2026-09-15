@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, AlertCircle, Loader2 } from 'lucide-react';
+import { Play, RotateCcw, Volume2, VolumeX, AlertCircle, Loader2, Music } from 'lucide-react';
 import { PrecisionAudioPlayer } from '@/lib/audio/player';
 import { AudioPlaybackState } from '@/lib/audio/types';
 
@@ -11,6 +11,7 @@ interface AudioWavePlayerProps {
   durationMs: number;
   onPlaybackEnded?: () => void;
   disabled?: boolean;
+  autoPlay?: boolean;
 }
 
 export function AudioWavePlayer({
@@ -19,6 +20,7 @@ export function AudioWavePlayer({
   durationMs,
   onPlaybackEnded,
   disabled = false,
+  autoPlay = false,
 }: AudioWavePlayerProps) {
   const [playerState, setPlayerState] = useState<AudioPlaybackState>('idle');
   const [progressRatio, setProgressRatio] = useState<number>(0);
@@ -28,10 +30,15 @@ export function AudioWavePlayer({
 
   const playerRef = useRef<PrecisionAudioPlayer | null>(null);
 
-  // Initialize or update player
+  // Initialize and update player whenever audioUrl, startMs, or durationMs changes
   useEffect(() => {
+    // Reset visual progress immediately
+    setProgressRatio(0);
+    setErrorMessage(null);
+
     const player = new PrecisionAudioPlayer();
     playerRef.current = player;
+    player.setVolume(isMuted ? 0 : volume);
 
     const unsubState = player.onStateChange((state) => {
       setPlayerState(state);
@@ -48,19 +55,29 @@ export function AudioWavePlayer({
       setErrorMessage(err.message);
     });
 
-    // Load initial segment
-    player.load({ audioUrl, startMs, durationMs });
+    // Load segment and optionally auto-play if requested
+    player
+      .load({ audioUrl, startMs, durationMs })
+      .then(() => {
+        if (autoPlay && playerRef.current === player) {
+          player.play().catch(() => {});
+        }
+      })
+      .catch(() => {});
 
     return () => {
       unsubState();
       unsubProg();
       unsubErr();
+      player.stop();
       player.destroy();
-      playerRef.current = null;
+      if (playerRef.current === player) {
+        playerRef.current = null;
+      }
     };
-  }, [audioUrl, startMs, durationMs, onPlaybackEnded]);
+  }, [audioUrl, startMs, durationMs, autoPlay, onPlaybackEnded]);
 
-  // Handle play / replay
+  // Handle play / pause toggle
   const handlePlayToggle = useCallback(async () => {
     if (disabled || !playerRef.current) return;
     setErrorMessage(null);
@@ -79,7 +96,6 @@ export function AudioWavePlayer({
   // Spacebar keyboard shortcut for accessibility
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if user is currently typing in an input
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
@@ -120,30 +136,31 @@ export function AudioWavePlayer({
   const durationSec = (durationMs / 1000).toFixed(1);
 
   return (
-    <div className="w-full glass-panel rounded-2xl p-5 border border-white/10 flex flex-col items-center gap-4 relative overflow-hidden">
-      {/* Dynamic soundwave gradient background when playing */}
+    <div className="w-full bg-white rounded-3xl p-5 sm:p-6 border-2 border-amber-300 shadow-[0_8px_30px_rgba(245,158,11,0.12)] flex flex-col items-center gap-4 relative overflow-hidden transition-all">
+      {/* Warm sunny animated gradient when playing */}
       {isPlaying && (
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/15 to-pink-500/10 animate-pulse pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-100/60 via-yellow-100/50 to-orange-100/60 animate-pulse pointer-events-none" />
       )}
 
       {/* Header bar: Clue timing & volume */}
-      <div className="w-full flex items-center justify-between text-xs text-slate-400 z-10">
+      <div className="w-full flex items-center justify-between text-xs text-slate-600 z-10">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 font-semibold border border-cyan-500/30">
-            {durationSec}s Clip
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-950 font-black border-2 border-amber-300 shadow-xs">
+            <Music className="w-3.5 h-3.5 text-amber-600 stroke-[2.5]" />
+            <span>{durationSec}s Clip</span>
           </span>
-          <span className="hidden sm:inline text-slate-500">Press [Space] to Play</span>
+          <span className="hidden sm:inline text-slate-500 font-bold">Press [Space] to Play</span>
         </div>
 
         {/* Volume controls */}
         <div className="flex items-center gap-2">
           <button
             onClick={toggleMute}
-            className="p-1 text-slate-400 hover:text-white transition-colors"
+            className="p-1 text-slate-500 hover:text-slate-900 transition-colors rounded-lg"
             title={isMuted ? 'Unmute' : 'Mute'}
             aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4" />}
+            {isMuted ? <VolumeX className="w-4 h-4 text-rose-500" /> : <Volume2 className="w-4 h-4 text-amber-600" />}
           </button>
           <input
             type="range"
@@ -152,7 +169,7 @@ export function AudioWavePlayer({
             step="0.05"
             value={isMuted ? 0 : volume}
             onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
-            className="w-16 sm:w-20 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+            className="w-16 sm:w-20 h-1.5 bg-amber-100 rounded-lg appearance-none cursor-pointer accent-amber-500"
             aria-label="Volume slider"
           />
         </div>
@@ -160,15 +177,15 @@ export function AudioWavePlayer({
 
       {/* Main Play / Equalizer Display */}
       <div className="flex flex-col items-center gap-3 my-2 z-10 w-full max-w-sm">
-        {/* Equalizer Visualizer Bars */}
-        <div className="h-10 flex items-end justify-center gap-1.5 w-48">
+        {/* Equalizer Visualizer Bars in Cheerful Yellow / Amber / Orange */}
+        <div className="h-10 flex items-end justify-center gap-2 w-52">
           {[1, 2, 3, 4, 5, 4, 3, 2, 1].map((barIdx, i) => (
             <div
               key={i}
               className={`w-2.5 rounded-full transition-all duration-100 ${
                 isPlaying
-                  ? `bg-gradient-to-t from-cyan-400 to-pink-400 eq-bar-${barIdx}`
-                  : 'bg-slate-700/60 h-2'
+                  ? `bg-gradient-to-t from-amber-400 via-yellow-400 to-orange-400 eq-bar-${barIdx}`
+                  : 'bg-amber-100 h-2'
               }`}
               style={{
                 height: isPlaying ? undefined : `${(i % 3) * 6 + 6}px`,
@@ -177,62 +194,62 @@ export function AudioWavePlayer({
           ))}
         </div>
 
-        {/* Big tactile Play button */}
+        {/* Big tactile Play button in vibrant Sunny Yellow */}
         <button
           onClick={handlePlayToggle}
           disabled={disabled || isLoading}
           aria-label={isPlaying ? 'Pause audio' : playerState === 'ended' ? 'Replay audio' : 'Play audio'}
-          className={`group relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all transform active:scale-95 shadow-xl ${
+          className={`group relative w-18 h-18 rounded-3xl flex items-center justify-center transition-all transform btn-tactile shadow-lg ${
             disabled
-              ? 'bg-slate-800 text-slate-600 cursor-not-allowed'
+              ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
               : isPlaying
-              ? 'bg-gradient-to-tr from-pink-500 to-purple-600 text-white shadow-pink-500/30'
-              : 'bg-gradient-to-tr from-cyan-500 to-purple-600 text-white hover:shadow-cyan-500/40 hover:scale-105'
+              ? 'bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-amber-500/40 scale-105 border-2 border-amber-600/30'
+              : 'bg-gradient-to-tr from-yellow-300 via-amber-400 to-amber-500 text-slate-950 font-black shadow-amber-400/40 hover:shadow-amber-400/60 hover:scale-105 active:scale-95 border-2 border-amber-400'
           }`}
         >
           {isLoading ? (
-            <Loader2 className="w-7 h-7 animate-spin text-white" />
+            <Loader2 className="w-8 h-8 animate-spin text-slate-950" />
           ) : isPlaying ? (
-            <div className="w-5 h-5 flex items-center justify-between">
-              <span className="w-1.5 h-5 bg-white rounded-full" />
-              <span className="w-1.5 h-5 bg-white rounded-full" />
+            <div className="w-6 h-6 flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-6 bg-white rounded-full" />
+              <span className="w-1.5 h-6 bg-white rounded-full" />
             </div>
           ) : playerState === 'ended' ? (
-            <RotateCcw className="w-7 h-7 text-white group-hover:rotate-[-45deg] transition-transform" />
+            <RotateCcw className="w-8 h-8 text-slate-950 group-hover:rotate-[-45deg] transition-transform stroke-[2.5]" />
           ) : (
-            <Play className="w-7 h-7 text-white fill-white ml-0.5" />
+            <Play className="w-8 h-8 text-slate-950 fill-slate-950 ml-1 stroke-[2.5]" />
           )}
         </button>
 
-        <span className="text-xs font-semibold tracking-wide text-slate-300">
+        <span className="text-xs font-black tracking-wide text-amber-950">
           {isLoading
-            ? 'Loading clip...'
+            ? 'Loading snippet...'
             : isPlaying
-            ? 'Playing snippet...'
+            ? '🎵 Playing audio snippet...'
             : playerState === 'ended'
-            ? 'Tap to replay'
-            : 'Tap to listen'}
+            ? 'Tap to replay snippet'
+            : 'Tap to listen to clip'}
         </span>
       </div>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-slate-800/80 h-1.5 rounded-full overflow-hidden z-10">
+      {/* Progress Bar in Sunny Gradient */}
+      <div className="w-full bg-amber-100 h-2 rounded-full overflow-hidden z-10 border border-amber-200">
         <div
-          className="h-full bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 transition-all duration-75 ease-out rounded-full"
+          className="h-full bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 transition-all duration-75 ease-out rounded-full"
           style={{ width: `${Math.min(100, Math.max(0, progressRatio * 100))}%` }}
         />
       </div>
 
-      {/* Error state alert */}
+      {/* Error alert */}
       {errorMessage && (
-        <div className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs z-10">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+        <div className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-700 text-xs z-10">
+          <div className="flex items-center gap-2 font-bold">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-500" />
             <span>{errorMessage}</span>
           </div>
           <button
             onClick={handleRetry}
-            className="px-2.5 py-1 rounded-lg bg-rose-500/30 hover:bg-rose-500/50 text-white font-medium"
+            className="px-3 py-1 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-800 font-black transition-colors"
           >
             Retry
           </button>

@@ -213,6 +213,11 @@ export async function nextUnlimitedRound(sessionId: string, playerId: string): P
     score: 0,
   });
 
+  await db
+    .update(gameSessions)
+    .set({ status: 'active' })
+    .where(eq(gameSessions.id, sessionId));
+
   return getSessionPublicState(sessionId, playerId);
 }
 
@@ -359,8 +364,12 @@ export async function submitRoundAttempt(
 
   if (isSkip) {
     outcome = 'skip';
-    nextState = 'skipped';
-    roundScore = 0;
+    if (attemptNumber >= 5) {
+      nextState = 'skipped';
+      roundScore = 0;
+    } else {
+      nextState = 'unresolved';
+    }
   } else if (isMatch) {
     outcome = 'correct';
     nextState = 'correct';

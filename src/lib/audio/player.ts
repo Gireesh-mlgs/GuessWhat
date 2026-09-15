@@ -1,7 +1,9 @@
 import { AudioPlaybackState, AudioPlayerError, PlaybackSegment } from './types';
 
 export class PrecisionAudioPlayer {
-  private audioContext: AudioContext | null = null;
+  private static sharedAudioContext: AudioContext | null = null;
+  private static activeSourceNode: AudioBufferSourceNode | null = null;
+
   private analyserNode: AnalyserNode | null = null;
   private gainNode: GainNode | null = null;
   private currentBuffer: AudioBuffer | null = null;
@@ -17,36 +19,44 @@ export class PrecisionAudioPlayer {
   private bufferCache: Map<string, AudioBuffer> = new Map();
   private rafId: number | null = null;
   private playbackStartTime: number = 0;
+  private currentLoadId: number = 0;
 
   constructor() {
-    // Lazy AudioContext initialization on user gesture
+    // Lazy initialization on user gesture
   }
 
   private initAudioContext(): AudioContext {
-    if (!this.audioContext) {
+    if (!PrecisionAudioPlayer.sharedAudioContext || PrecisionAudioPlayer.sharedAudioContext.state === 'closed') {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      this.audioContext = new AudioCtx();
-      this.gainNode = this.audioContext.createGain();
+      PrecisionAudioPlayer.sharedAudioContext = new AudioCtx();
+    }
+    const ctx = PrecisionAudioPlayer.sharedAudioContext;
+
+    if (!this.gainNode) {
+      this.gainNode = ctx.createGain();
       this.gainNode.gain.value = this.volume;
-      this.analyserNode = this.audioContext.createAnalyser();
+      this.analyserNode = ctx.createAnalyser();
       this.analyserNode.fftSize = 64;
 
       this.gainNode.connect(this.analyserNode);
-      this.analyserNode.connect(this.audioContext.destination);
+      this.analyserNode.connect(ctx.destination);
     }
-    if (this.audioContext.state === 'suspended') {
-      this.audioContext.resume();
+
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
     }
-    return this.audioContext;
+    return ctx;
   }
 
   public async load(segment: PlaybackSegment): Promise<void> {
+    const loadId = ++this.currentLoadId;
     this.stopPlayback();
     this.currentSegment = segment;
     this.setState('loading');
 
     try {
       if (this.bufferCache.has(segment.audioUrl)) {
+        if (loadId !== this.currentLoadId) return;
         this.currentBuffer = this.bufferCache.get(segment.audioUrl)!;
         this.setState('paused');
         return;
@@ -57,12 +67,17 @@ export class PrecisionAudioPlayer {
         throw new Error(`Failed to load audio (${response.status})`);
       }
       const arrayBuffer = await response.arrayBuffer();
+      if (loadId !== this.currentLoadId) return;
+
       const ctx = this.initAudioContext();
       const decoded = await ctx.decodeAudioData(arrayBuffer);
+      if (loadId !== this.currentLoadId) return;
+
       this.bufferCache.set(segment.audioUrl, decoded);
       this.currentBuffer = decoded;
       this.setState('paused');
     } catch (err: unknown) {
+      if (loadId !== this.currentLoadId) return;
       this.setState('error');
       const msg = err instanceof Error ? err.message : 'Audio decode failed';
       this.notifyError({ message: msg, code: 'DECODE_ERROR' });
@@ -76,27 +91,50 @@ export class PrecisionAudioPlayer {
 
     const ctx = this.initAudioContext();
     if (ctx.state === 'suspended') {
-      await ctx.resume();
+      await ctx.resume().catch(() => {});
     }
 
+    // Stop current playback on this instance
     this.stopPlayback();
+
+    // Kill any other active audio source globally in the app
+    if (PrecisionAudioPlayer.activeSourceNode) {
+      const prevSource = PrecisionAudioPlayer.activeSourceNode;
+      PrecisionAudioPlayer.activeSourceNode = null;
+      prevSource.onended = null;
+      try {
+        prevSource.stop(0);
+        prevSource.disconnect();
+      } catch {
+        // Safe ignore
+      }
+    }
 
     const source = ctx.createBufferSource();
     source.buffer = this.currentBuffer;
     source.connect(this.gainNode!);
     this.currentSourceNode = source;
+    PrecisionAudioPlayer.activeSourceNode = source;
 
-    const startSec = (this.currentSegment.startMs || 0) / 1000;
+    const startSec = Math.max(0, (this.currentSegment.startMs || 0) / 1000);
     const durationSec = Math.max(0.05, this.currentSegment.durationMs / 1000);
 
-    // Exact sub-second audio clamp: Web Audio schedule stops precisely at startSec + durationSec
-    source.start(0, startSec, durationSec);
+    // Bounds safety: clamp to buffer boundaries to avoid InvalidStateError
+    const bufferDuration = this.currentBuffer.duration;
+    const safeOffset = Math.min(startSec, Math.max(0, bufferDuration - 0.05));
+    const safeDuration = Math.min(durationSec, Math.max(0.05, bufferDuration - safeOffset));
+
+    // Exact sub-second Web Audio schedule: stops precisely at safeOffset + safeDuration
+    source.start(0, safeOffset, safeDuration);
     this.playbackStartTime = performance.now();
     this.setState('playing');
 
     source.onended = () => {
       if (this.currentSourceNode === source) {
         this.currentSourceNode = null;
+        if (PrecisionAudioPlayer.activeSourceNode === source) {
+          PrecisionAudioPlayer.activeSourceNode = null;
+        }
         this.setState('ended');
         this.notifyProgress(1.0, this.currentSegment?.durationMs || 0);
         if (this.rafId) {
@@ -106,7 +144,7 @@ export class PrecisionAudioPlayer {
       }
     };
 
-    this.startProgressTracking(durationSec * 1000);
+    this.startProgressTracking(safeDuration * 1000);
   }
 
   public pause(): void {
@@ -119,8 +157,10 @@ export class PrecisionAudioPlayer {
   }
 
   public stop(): void {
+    this.currentLoadId++;
     this.stopPlayback();
     this.setState('idle');
+    this.notifyProgress(0, 0);
   }
 
   private stopPlayback(): void {
@@ -129,13 +169,19 @@ export class PrecisionAudioPlayer {
       this.rafId = null;
     }
     if (this.currentSourceNode) {
+      const node = this.currentSourceNode;
+      this.currentSourceNode = null;
+      // Invalidate event listener so ended callback never fires after stopping
+      node.onended = null;
       try {
-        this.currentSourceNode.stop();
-        this.currentSourceNode.disconnect();
+        node.stop(0);
+        node.disconnect();
       } catch {
         // Node might already be stopped
       }
-      this.currentSourceNode = null;
+      if (PrecisionAudioPlayer.activeSourceNode === node) {
+        PrecisionAudioPlayer.activeSourceNode = null;
+      }
     }
   }
 
@@ -205,12 +251,10 @@ export class PrecisionAudioPlayer {
   }
 
   public destroy(): void {
+    this.currentLoadId++;
     this.stopPlayback();
     this.stateListeners.clear();
     this.progressListeners.clear();
     this.errorListeners.clear();
-    if (this.audioContext && this.audioContext.state !== 'closed') {
-      this.audioContext.close();
-    }
   }
 }

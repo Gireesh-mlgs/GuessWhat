@@ -19,8 +19,11 @@ export function OpportunityBar({
 }: OpportunityBarProps) {
   return (
     <div className="w-full space-y-2">
-      <div className="flex items-center justify-between text-xs text-slate-400 font-medium">
-        <span>Reveal Schedule</span>
+      <div className="flex items-center justify-between text-xs text-amber-950 font-black px-1">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+          Reveal Schedule
+        </span>
         <span>
           Opportunity {Math.min(5, isResolved ? attemptCount : currentOpportunity)} of 5
         </span>
@@ -32,32 +35,31 @@ export function OpportunityBar({
           const isPastAttempt = slotNum <= attemptCount;
           const isCurrent = slotNum === currentOpportunity && !isResolved;
           const isWinningSlot = state === 'correct' && solvedAtAttempt === slotNum;
-          const isFailedSlot = (state === 'exhausted' || state === 'skipped') && isPastAttempt;
 
-          let badgeStyle = 'bg-slate-900/60 border-slate-800 text-slate-500';
+          let badgeStyle = 'bg-white border-2 border-amber-200/80 text-slate-400';
 
           if (isWinningSlot) {
-            badgeStyle = 'bg-emerald-500/20 border-emerald-500/60 text-emerald-300 shadow-lg shadow-emerald-500/20';
+            badgeStyle = 'bg-emerald-100 border-2 border-emerald-500 text-emerald-950 shadow-sm';
           } else if (isCurrent) {
-            badgeStyle = 'bg-cyan-500/20 border-cyan-400 text-cyan-200 ring-2 ring-cyan-500/30';
+            badgeStyle = 'bg-amber-200 border-2 border-amber-500 text-amber-950 ring-4 ring-amber-300/80 shadow-md font-black scale-105';
           } else if (isPastAttempt) {
-            badgeStyle = 'bg-rose-500/15 border-rose-500/40 text-rose-300/80';
+            badgeStyle = 'bg-rose-50 border-2 border-rose-200 text-rose-700 font-bold';
           }
 
           return (
             <div
               key={slot.opportunity}
-              className={`flex flex-col items-center justify-center p-2 rounded-xl border text-center transition-all ${badgeStyle}`}
+              className={`flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl text-center transition-all ${badgeStyle}`}
             >
-              <div className="flex items-center gap-1 font-bold text-xs sm:text-sm">
+              <div className="flex items-center gap-1 font-black text-xs sm:text-sm">
                 {isWinningSlot ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
                 ) : isPastAttempt && !isWinningSlot ? (
-                  <X className="w-3.5 h-3.5 text-rose-400" />
+                  <X className="w-3.5 h-3.5 text-rose-500 stroke-[2.5]" />
                 ) : null}
                 <span>{slot.durationSec}s</span>
               </div>
-              <span className="text-[10px] opacity-70 font-semibold mt-0.5">
+              <span className="text-[10px] font-black mt-0.5 opacity-90">
                 {slot.basePoints} pts
               </span>
             </div>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Trophy, Play, Music, Users, HelpCircle, Settings, Menu, X, User } from 'lucide-react';
+import { Flame, Trophy, Play, Music, Users, HelpCircle, Settings, Menu, X, User, Sparkles } from 'lucide-react';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -22,30 +22,31 @@ export function Navbar() {
   }, [pathname]);
 
   const navItems = [
-    { label: 'Daily', href: '/daily', icon: Flame },
-    { label: 'Unlimited', href: '/unlimited', icon: Play },
-    { label: 'Challenge', href: '/challenge/new', icon: Users },
-    { label: 'Leaderboard', href: '/leaderboard', icon: Trophy },
-    { label: 'How It Works', href: '/how-it-works', icon: HelpCircle },
+    { label: 'Daily', href: '/daily', icon: Flame, color: 'text-amber-600' },
+    { label: 'Unlimited', href: '/unlimited', icon: Play, color: 'text-amber-700' },
+    { label: 'Challenge', href: '/challenge/new', icon: Users, color: 'text-orange-600' },
+    { label: 'Leaderboard', href: '/leaderboard', icon: Trophy, color: 'text-yellow-700' },
+    { label: 'How It Works', href: '/how-it-works', icon: HelpCircle, color: 'text-amber-600' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 glass-panel border-b border-white/10 bg-slate-950/80 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b-2 border-amber-200/80 shadow-[0_2px_12px_rgba(234,179,8,0.06)]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Music className="w-4 h-4 text-cyan-400 group-hover:rotate-12 transition-transform" />
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-500 p-0.5 shadow-md shadow-amber-400/30 group-hover:scale-105 transition-transform">
+            <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
+              <Music className="w-5 h-5 text-amber-600 stroke-[2.5] group-hover:rotate-12 transition-transform" />
             </div>
           </div>
-          <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-cyan-300">
-            Song<span className="text-cyan-400">Sprint</span>
+          <span className="font-black text-xl tracking-tight text-slate-900">
+            Song<span className="text-amber-500">Sprint</span>
+            <span className="inline-block ml-1 text-sm font-black text-amber-500 animate-bounce">⚡</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -53,36 +54,36 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
                   isActive
-                    ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    ? 'bg-amber-100 text-amber-950 border-2 border-amber-300 shadow-xs'
+                    : 'text-slate-700 hover:text-slate-950 hover:bg-amber-50'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? item.color : 'text-amber-500'}`} />
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        {/* Right Actions: Streak & Profile */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right Actions: Streak & Settings */}
+        <div className="flex items-center gap-2.5">
           {/* Streak pill */}
           <Link
             href="/profile"
             title="Daily Streak"
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500/20 transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-100 border-2 border-amber-300 text-amber-950 text-xs font-black hover:bg-amber-200/80 transition-all shadow-xs active:scale-95"
           >
-            <Flame className="w-4 h-4 text-amber-400 animate-pulse fill-amber-400/30" />
-            <span>{streak}</span>
+            <Flame className="w-4 h-4 text-amber-500 fill-amber-400" />
+            <span>{streak} Streak</span>
           </Link>
 
-          {/* Settings / Profile link */}
+          {/* Settings */}
           <Link
             href="/settings"
-            title="Settings & Privacy"
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            title="Settings"
+            className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-amber-50 border border-transparent hover:border-amber-200 transition-colors"
           >
             <Settings className="w-4 h-4" />
           </Link>
@@ -90,7 +91,7 @@ export function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 focus:outline-none"
+            className="md:hidden p-2 rounded-xl text-slate-700 hover:text-slate-950 hover:bg-amber-50 focus:outline-none"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -100,7 +101,7 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-white/10 px-4 pt-2 pb-4 space-y-1 bg-slate-950/95 backdrop-blur-xl animate-in slide-in-from-top-2">
+        <div className="md:hidden border-t-2 border-amber-200 px-4 pt-3 pb-5 space-y-1 bg-white shadow-xl animate-in slide-in-from-top-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -109,29 +110,29 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium transition-colors ${
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-black transition-all ${
                   isActive
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    ? 'bg-amber-100 text-amber-950 border-2 border-amber-300'
+                    : 'text-slate-700 hover:bg-amber-50'
                 }`}
               >
-                <Icon className="w-5 h-5 text-cyan-400" />
+                <Icon className={`w-4 h-4 ${item.color}`} />
                 {item.label}
               </Link>
             );
           })}
-          <div className="pt-2 border-t border-white/10 flex justify-around">
+          <div className="pt-3 mt-2 border-t border-amber-100 flex justify-around">
             <Link
               href="/profile"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 text-sm text-slate-400 hover:text-white py-1.5"
+              className="flex items-center gap-2 text-xs font-black text-slate-700 hover:text-amber-600 py-1"
             >
               <User className="w-4 h-4" /> Profile
             </Link>
             <Link
               href="/settings"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 text-sm text-slate-400 hover:text-white py-1.5"
+              className="flex items-center gap-2 text-xs font-black text-slate-700 hover:text-amber-600 py-1"
             >
               <Settings className="w-4 h-4" /> Settings
             </Link>

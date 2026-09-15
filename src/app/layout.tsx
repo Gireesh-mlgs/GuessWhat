@@ -4,9 +4,9 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'SongSprint — The Fast-Paced Song Recognition Game',
+  title: 'SongSprint — Fun Yellow Music Guessing Game',
   description:
-    'Play the daily song-recognition sprint, practice unlimited rounds, and challenge friends with short audio clues. Server-verified, spoiler-safe, and lawful music previews.',
+    'Listen to sub-second audio snippets, guess the song, maintain your streak, and challenge your musical ear. Fast-paced, playful, and fun!',
   keywords: ['music quiz', 'song guessing game', 'daily challenge', 'unlimited music game', 'song recognition'],
   icons: {
     icon: '/brand/icon.svg',
@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+    <html lang="en">
+      <body className="min-h-screen flex flex-col bg-[#FFFDF0] text-slate-900 antialiased selection:bg-amber-300 selection:text-slate-950">
         <Navbar />
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />

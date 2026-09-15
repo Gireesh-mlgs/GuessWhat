@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DifficultyTier } from '@/lib/game/scoring';
 import type { PublicSessionState } from '@/lib/game/types';
 import { OpportunityBar } from '@/components/game/OpportunityBar';
 import { AudioWavePlayer } from '@/components/audio/AudioWavePlayer';
 import { AnswerSearchBox } from '@/components/game/AnswerSearchBox';
 import { RoundResultBanner } from '@/components/game/RoundResultBanner';
-import { Play, RotateCcw, BarChart2, CheckCircle2, Award, Zap, Loader2 } from 'lucide-react';
+import { Play, RotateCcw, Zap, Loader2, Music, Sparkles } from 'lucide-react';
 
 const CATEGORIES = ['All', 'Electronic', 'Pop', 'Rock', 'Soundtrack', 'Hip-Hop', 'Acoustic'];
 
@@ -17,6 +17,8 @@ export default function UnlimitedPage() {
   const [session, setSession] = useState<PublicSessionState | null>(null);
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [streakPopping, setStreakPopping] = useState(false);
+  const [autoPlayNext, setAutoPlayNext] = useState(false);
 
   // Local Practice Stats
   const [stats, setStats] = useState({
@@ -24,6 +26,7 @@ export default function UnlimitedPage() {
     correctCount: 0,
     totalScore: 0,
     revealsSum: 0,
+    streak: 0,
   });
 
   // Start new practice session
@@ -38,6 +41,7 @@ export default function UnlimitedPage() {
       const json = await res.json();
       if (json?.success) {
         setSession(json.data);
+        setAutoPlayNext(true);
       }
     } catch {
       // Error
@@ -49,28 +53,40 @@ export default function UnlimitedPage() {
   const currentRound = session ? session.rounds[session.activeRoundIndex] : null;
 
   const handleSubmitGuess = async (songId: string | null, isSkip = false) => {
-    if (!currentRound || isSubmitting) return;
+    if (!session || !currentRound || isSubmitting) return;
     setIsSubmitting(true);
 
     try {
       const res = await fetch(`/api/v1/rounds/${currentRound.id}/attempts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ submittedSongId: songId, isSkip }),
+        body: JSON.stringify({ submittedSongId: isSkip ? null : songId, isSkip }),
       });
       const json = await res.json();
       if (json?.success) {
         setSession(json.data.session);
 
-        // If round resolved, update lifetime session stats
+        // If round resolved, update stats & streak
         const updatedRound = json.data.round;
         if (updatedRound.state !== 'unresolved') {
+          const isCorrect = updatedRound.state === 'correct';
+
+          if (isCorrect) {
+            setStreakPopping(true);
+            setTimeout(() => setStreakPopping(false), 600);
+          }
+
           setStats((prev) => ({
             roundsPlayed: prev.roundsPlayed + 1,
-            correctCount: prev.correctCount + (updatedRound.state === 'correct' ? 1 : 0),
+            correctCount: prev.correctCount + (isCorrect ? 1 : 0),
             totalScore: prev.totalScore + updatedRound.score,
             revealsSum: prev.revealsSum + updatedRound.attemptCount,
+            streak: isCorrect ? prev.streak + 1 : 0,
           }));
+        } else {
+          // Next clue unlocked on skip or incorrect guess:
+          // auto-play the new snippet length from the beginning!
+          setAutoPlayNext(true);
         }
       }
     } catch {
@@ -90,6 +106,7 @@ export default function UnlimitedPage() {
       const json = await res.json();
       if (json?.success) {
         setSession(json.data);
+        setAutoPlayNext(true);
       }
     } catch {
       // Error
@@ -99,26 +116,37 @@ export default function UnlimitedPage() {
   };
 
   const accuracy = stats.roundsPlayed > 0 ? Math.round((stats.correctCount / stats.roundsPlayed) * 100) : 0;
-  const avgReveals = stats.roundsPlayed > 0 ? (stats.revealsSum / stats.roundsPlayed).toFixed(1) : '0.0';
 
   return (
-    <div className="flex-1 flex flex-col items-center px-4 py-6 max-w-xl mx-auto w-full space-y-6">
+    <div className="relative flex-1 flex flex-col items-center px-4 py-8 max-w-xl mx-auto w-full space-y-6">
+      {/* Playful yellow background floating decorative elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <span className="absolute top-20 left-[10%] text-3xl text-amber-300/80 select-none animate-float-slow">⭐</span>
+        <span className="absolute top-36 right-[12%] text-3xl text-yellow-400/90 select-none animate-float-delayed">⚡</span>
+        <span className="absolute bottom-40 left-[8%] text-3xl text-amber-400/80 select-none animate-float-delayed">🎵</span>
+        <span className="absolute bottom-28 right-[10%] text-3xl text-yellow-500/80 select-none animate-float-slow">❓</span>
+        <span className="absolute top-1/2 left-[5%] text-2xl text-amber-300/70 select-none animate-float-slow">✨</span>
+        <span className="absolute top-1/3 right-[6%] text-xl text-yellow-400/80 select-none animate-float-delayed">🎶</span>
+      </div>
+
       {/* Mode Header */}
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between z-10">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-white">Unlimited Practice</h1>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
-              Endless
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              Guess The Song
+            </h1>
+            <span className="text-[11px] px-3 py-0.5 rounded-full bg-amber-200 text-amber-950 font-black border border-amber-300 shadow-2xs">
+              Practice ⚡
             </span>
           </div>
-          <p className="text-xs text-slate-400">Non-leaderboard practice mode. Tune your ear anytime.</p>
+          <p className="text-xs sm:text-sm text-slate-600 font-bold">Listen to the clip and guess the right track!</p>
         </div>
 
         {session && (
           <button
             onClick={() => setSession(null)}
-            className="text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg border border-white/10 hover:bg-white/5"
+            className="text-xs font-black text-amber-950 hover:text-black px-3.5 py-1.5 rounded-xl border-2 border-amber-300 bg-white hover:bg-amber-100 transition-all btn-tactile shadow-2xs"
           >
             Change Mode
           </button>
@@ -127,21 +155,21 @@ export default function UnlimitedPage() {
 
       {/* Setup screen if unstarted */}
       {!session ? (
-        <div className="w-full glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+        <div className="w-full bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-[0_10px_35px_rgba(245,158,11,0.12)] space-y-6 z-10">
           {/* Category Filter */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+          <div className="space-y-2.5">
+            <label className="text-xs font-black text-amber-950 uppercase tracking-wider block">
               Music Category
             </label>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all btn-tactile ${
                     selectedCategory === cat
-                      ? 'bg-cyan-500 text-black shadow-md shadow-cyan-500/30'
-                      : 'bg-slate-900/80 text-slate-400 hover:text-white border border-white/5'
+                      ? 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-sm shadow-amber-400/40 scale-105'
+                      : 'bg-amber-50/70 text-amber-950 hover:bg-amber-100 border-2 border-amber-200'
                   }`}
                 >
                   {cat}
@@ -151,8 +179,8 @@ export default function UnlimitedPage() {
           </div>
 
           {/* Difficulty Tier */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+          <div className="space-y-2.5">
+            <label className="text-xs font-black text-amber-950 uppercase tracking-wider block">
               Difficulty Tier
             </label>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
@@ -160,10 +188,10 @@ export default function UnlimitedPage() {
                 <button
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
-                  className={`py-2 px-1 rounded-xl text-xs font-bold text-center border transition-all ${
+                  className={`py-2.5 px-1 rounded-2xl text-xs font-black text-center border-2 transition-all btn-tactile ${
                     selectedTier === tier
-                      ? 'bg-purple-500/20 border-purple-400 text-purple-200 ring-2 ring-purple-500/30'
-                      : 'bg-slate-900/60 border-white/5 text-slate-400 hover:bg-slate-900'
+                      ? 'bg-amber-200 border-amber-500 text-amber-950 ring-4 ring-amber-300/80 shadow-xs'
+                      : 'bg-white border-amber-200 text-slate-700 hover:bg-amber-50/60'
                   }`}
                 >
                   {tier}
@@ -175,28 +203,49 @@ export default function UnlimitedPage() {
           <button
             onClick={startPractice}
             disabled={loading}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:opacity-95 text-white font-black text-base flex items-center justify-center gap-2 shadow-xl shadow-cyan-500/25 transition-all transform active:scale-95"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black text-base flex items-center justify-center gap-2 shadow-md shadow-amber-400/40 border-2 border-amber-500/40 btn-tactile"
           >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5 fill-white" />}
-            <span>Start Practice Sprint</span>
+            {loading ? <Loader2 className="w-5 h-5 animate-spin text-slate-950" /> : <Play className="w-5 h-5 fill-slate-950 ml-0.5" />}
+            <span>Start Practice Game ⚡</span>
           </button>
         </div>
       ) : (
         /* Active Practice Round */
-        <div className="w-full space-y-5">
-          {/* Quick Stats Banner */}
-          <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div className="p-2.5 rounded-xl bg-slate-900/60 border border-white/5">
-              <span className="text-[10px] text-slate-500 font-bold uppercase block">Rounds</span>
-              <span className="font-extrabold text-white text-sm">{stats.roundsPlayed}</span>
+        <div className="w-full space-y-5 z-10">
+          {/* Prominent Gameplay Stats: 🔥 Streak, ⭐ Score, 🎯 Accuracy in Yellow Fun Theme */}
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3 w-full">
+            {/* Streak Card */}
+            <div
+              className={`p-3 sm:p-4 rounded-3xl bg-amber-100/90 border-2 border-amber-300 shadow-[0_4px_16px_rgba(245,158,11,0.12)] flex flex-col items-center justify-center text-center transition-all ${
+                streakPopping ? 'animate-streak-pop ring-4 ring-amber-400 scale-105' : ''
+              }`}
+            >
+              <span className="text-[11px] sm:text-xs font-black text-amber-950 uppercase tracking-wider flex items-center gap-1">
+                <span>🔥</span> Streak
+              </span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-950 mt-0.5">
+                {stats.streak}
+              </span>
             </div>
-            <div className="p-2.5 rounded-xl bg-slate-900/60 border border-white/5">
-              <span className="text-[10px] text-slate-500 font-bold uppercase block">Accuracy</span>
-              <span className="font-extrabold text-emerald-400 text-sm">{accuracy}%</span>
+
+            {/* Score Card */}
+            <div className="p-3 sm:p-4 rounded-3xl bg-yellow-100/90 border-2 border-yellow-300 shadow-[0_4px_16px_rgba(234,179,8,0.12)] flex flex-col items-center justify-center text-center">
+              <span className="text-[11px] sm:text-xs font-black text-yellow-950 uppercase tracking-wider flex items-center gap-1">
+                <span>⭐</span> Score
+              </span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-950 mt-0.5">
+                {stats.totalScore}
+              </span>
             </div>
-            <div className="p-2.5 rounded-xl bg-slate-900/60 border border-white/5">
-              <span className="text-[10px] text-slate-500 font-bold uppercase block">Avg Clues</span>
-              <span className="font-extrabold text-cyan-400 text-sm">{avgReveals}</span>
+
+            {/* Accuracy Card */}
+            <div className="p-3 sm:p-4 rounded-3xl bg-amber-50 border-2 border-amber-200 shadow-[0_4px_16px_rgba(245,158,11,0.08)] flex flex-col items-center justify-center text-center">
+              <span className="text-[11px] sm:text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1">
+                <span>🎯</span> Accuracy
+              </span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
+                {accuracy}%
+              </span>
             </div>
           </div>
 
@@ -211,11 +260,13 @@ export default function UnlimitedPage() {
                 state={currentRound.state}
               />
 
-              {/* Audio Player */}
+              {/* 🎵 Song / Audio area */}
               <AudioWavePlayer
+                key={`audio-${currentRound.id}-${currentRound.currentOpportunity}`}
                 audioUrl={currentRound.audioUrl}
                 startMs={currentRound.startMs}
                 durationMs={currentRound.state !== 'unresolved' ? 5000 : currentRound.currentDurationMs}
+                autoPlay={autoPlayNext}
               />
 
               {/* Interaction: Search or Round Result */}

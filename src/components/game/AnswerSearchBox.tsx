@@ -31,6 +31,7 @@ export function AnswerSearchBox({
   const [selectedSong, setSelectedSong] = useState<CandidateSong | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [shakeInput, setShakeInput] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -120,7 +121,15 @@ export function AnswerSearchBox({
   };
 
   const handleSubmit = () => {
-    if (!selectedSong || isSubmitting || disabled) return;
+    if (disabled || isSubmitting) return;
+
+    if (!selectedSong) {
+      // Trigger warning shake if clicked without selecting a candidate
+      setShakeInput(true);
+      setTimeout(() => setShakeInput(false), 400);
+      return;
+    }
+
     onSelectAnswer(selectedSong.id);
     setSelectedSong(null);
     setQuery('');
@@ -128,16 +137,29 @@ export function AnswerSearchBox({
   };
 
   return (
-    <div ref={containerRef} className="w-full space-y-3">
+    <div ref={containerRef} className="w-full space-y-3.5">
+      {/* Friendly Prominent Prompt */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+          <span>What song is this?</span>
+          <span className="inline-block text-amber-500 font-black animate-bounce text-base">⚡</span>
+        </h2>
+        {selectedSong && (
+          <span className="text-[11px] font-black text-amber-950 bg-amber-200 px-3 py-0.5 rounded-full border border-amber-300 shadow-2xs">
+            Song selected
+          </span>
+        )}
+      </div>
+
       {/* Search Bar with Autocomplete Dropdown */}
-      <div className="relative">
+      <div className={`relative ${shakeInput ? 'animate-wrong-shake' : ''}`}>
         <div className="relative flex items-center">
-          <Search className="absolute left-4 w-4 h-4 text-slate-400 pointer-events-none" />
+          <Search className="absolute left-4 w-5 h-5 text-amber-600 pointer-events-none" />
           <input
             type="text"
             value={query}
             disabled={disabled || isSubmitting}
-            placeholder="Search song title or artist..."
+            placeholder="Type your guess..."
             onChange={(e) => {
               handleQueryChange(e.target.value);
             }}
@@ -145,12 +167,12 @@ export function AnswerSearchBox({
             onFocus={() => {
               if (candidates.length > 0) setDropdownOpen(true);
             }}
-            className="w-full pl-11 pr-10 py-3.5 bg-slate-900/90 border border-white/10 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400 text-sm font-medium transition-all"
-            aria-label="Search song title or artist"
+            className="w-full pl-12 pr-10 py-3.5 bg-white border-2 border-amber-300 rounded-2xl text-slate-900 placeholder-slate-400 font-bold text-sm sm:text-base shadow-xs focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all"
+            aria-label="Type your guess"
             aria-autocomplete="list"
           />
           {isSearching && (
-            <Loader2 className="absolute right-4 w-4 h-4 animate-spin text-cyan-400" />
+            <Loader2 className="absolute right-4 w-5 h-5 animate-spin text-amber-600" />
           )}
         </div>
 
@@ -158,7 +180,7 @@ export function AnswerSearchBox({
         {dropdownOpen && candidates.length > 0 && (
           <ul
             role="listbox"
-            className="absolute left-0 right-0 top-full mt-2 bg-slate-900 border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-60 overflow-y-auto divide-y divide-white/5"
+            className="absolute left-0 right-0 top-full mt-2 bg-white border-2 border-amber-300 rounded-2xl shadow-xl overflow-hidden z-50 max-h-64 overflow-y-auto divide-y divide-amber-100"
           >
             {candidates.map((song, idx) => {
               const isHighlighted = idx === highlightedIndex;
@@ -170,17 +192,19 @@ export function AnswerSearchBox({
                   onClick={() => handleSelect(song)}
                   onMouseEnter={() => setHighlightedIndex(idx)}
                   className={`px-4 py-3 flex items-center justify-between cursor-pointer transition-colors ${
-                    isHighlighted ? 'bg-cyan-500/20 text-white' : 'hover:bg-white/5 text-slate-200'
+                    isHighlighted ? 'bg-amber-100 text-amber-950 font-bold' : 'hover:bg-amber-50/70 text-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Music2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                    <div className="w-8 h-8 rounded-xl bg-amber-200 border border-amber-300 flex items-center justify-center flex-shrink-0">
+                      <Music2 className="w-4 h-4 text-amber-900 stroke-[2.5]" />
+                    </div>
                     <div className="flex flex-col">
-                      <span className="font-semibold text-sm">{song.canonicalTitle}</span>
-                      <span className="text-xs text-slate-400">{song.primaryArtist}</span>
+                      <span className="font-black text-sm text-slate-900">{song.canonicalTitle}</span>
+                      <span className="text-xs text-slate-600 font-semibold">{song.primaryArtist}</span>
                     </div>
                   </div>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-medium">
+                  <span className="text-[11px] px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-black border border-amber-200">
                     {song.genre}
                   </span>
                 </li>
@@ -190,40 +214,40 @@ export function AnswerSearchBox({
         )}
 
         {dropdownOpen && !isSearching && query.trim().length > 1 && candidates.length === 0 && (
-          <div className="absolute left-0 right-0 top-full mt-2 bg-slate-900 border border-white/10 rounded-2xl p-4 text-center text-xs text-slate-400 z-50">
+          <div className="absolute left-0 right-0 top-full mt-2 bg-white border-2 border-amber-300 rounded-2xl p-4 text-center text-xs font-black text-slate-600 shadow-xl z-50">
             No matching songs found. Try a different title or artist name.
           </div>
         )}
       </div>
 
-      {/* Action Buttons: Submit Guess & Skip */}
-      <div className="flex items-center gap-2.5">
+      {/* Action Buttons: GUESS & SKIP */}
+      <div className="flex items-center gap-3 pt-1">
         <button
           type="button"
           onClick={onSkip}
           disabled={disabled || isSubmitting}
-          className="flex-1 py-3 px-4 rounded-xl border border-white/10 hover:border-slate-600 bg-slate-900/60 hover:bg-slate-800 text-slate-300 text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50"
+          className="flex-1 py-3.5 px-4 rounded-2xl border-2 border-amber-300 hover:border-amber-400 bg-amber-50 hover:bg-amber-100 text-amber-950 text-sm font-black flex items-center justify-center gap-2 btn-tactile disabled:opacity-50 shadow-2xs"
         >
-          <FastForward className="w-4 h-4 text-slate-400" />
-          <span>Skip (+0 pts)</span>
+          <FastForward className="w-4 h-4 text-amber-700 stroke-[2.5]" />
+          <span>SKIP</span>
         </button>
 
         <button
           type="button"
           onClick={handleSubmit}
           disabled={!selectedSong || isSubmitting || disabled}
-          className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg ${
+          className={`flex-1 py-3.5 px-4 rounded-2xl text-sm font-black tracking-wide flex items-center justify-center gap-2 btn-tactile shadow-md ${
             selectedSong && !disabled && !isSubmitting
-              ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02]'
-              : 'bg-slate-800 text-slate-500 border border-white/5 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 border-2 border-amber-400 shadow-amber-400/30 hover:shadow-amber-400/50 hover:scale-[1.02]'
+              : 'bg-amber-100/60 text-amber-900/40 border-2 border-amber-200 cursor-not-allowed'
           }`}
         >
           {isSubmitting ? (
-            <Loader2 className="w-4 h-4 animate-spin text-white" />
+            <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
           ) : (
-            <Check className="w-4 h-4" />
+            <Check className="w-4 h-4 stroke-[3]" />
           )}
-          <span>Submit Answer</span>
+          <span>GUESS</span>
         </button>
       </div>
     </div>
