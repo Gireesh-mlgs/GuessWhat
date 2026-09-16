@@ -212,12 +212,6 @@ export function AnswerSearchBox({
             })}
           </ul>
         )}
-
-        {dropdownOpen && !isSearching && query.trim().length > 1 && candidates.length === 0 && (
-          <div className="absolute left-0 right-0 top-full mt-2 bg-white border-2 border-amber-300 rounded-2xl p-4 text-center text-xs font-black text-slate-600 shadow-xl z-50">
-            No matching songs found. Try a different title or artist name.
-          </div>
-        )}
       </div>
 
       {/* Action Buttons: GUESS & SKIP */}
