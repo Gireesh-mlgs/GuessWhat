@@ -81,8 +81,10 @@ export async function startOrResumeDailySession(playerId: string, difficultyTier
   });
 
   if (items.length === 0) {
-    // If today's items haven't been generated, select 5 active songs
-    const allSongs = await db.query.songs.findMany({ where: eq(songs.status, 'active') });
+    // If today's items haven't been generated, select 5 active songs with verified lyrics
+    const allSongs = await db.query.songs.findMany({
+      where: and(eq(songs.status, 'active'), eq(songs.hasLyrics, 1)),
+    });
     const selected = allSongs.slice(0, 5);
     items = [];
     for (let i = 0; i < selected.length; i++) {
@@ -134,7 +136,7 @@ export async function startOrResumeDailySession(playerId: string, difficultyTier
 export async function startUnlimitedSession(playerId: string, difficultyTier: DifficultyTier, category: string): Promise<PublicSessionState> {
   await initDb();
   const allSongs = await db.query.songs.findMany({
-    where: eq(songs.status, 'active'),
+    where: and(eq(songs.status, 'active'), eq(songs.hasLyrics, 1)),
   });
 
   let pool = allSongs;
@@ -191,9 +193,11 @@ export async function nextUnlimitedRound(sessionId: string, playerId: string): P
     return getSessionPublicState(sessionId, playerId);
   }
 
-  // Exclude songs already played in this session
+  // Exclude songs already played in this session (only use songs with lyrics)
   const playedSongIds = new Set(existingRounds.map((r) => r.songId));
-  const allSongs = await db.query.songs.findMany({ where: eq(songs.status, 'active') });
+  const allSongs = await db.query.songs.findMany({
+    where: and(eq(songs.status, 'active'), eq(songs.hasLyrics, 1)),
+  });
   let pool = allSongs.filter((s) => !playedSongIds.has(s.id));
   if (pool.length === 0) {
     pool = allSongs;
@@ -229,7 +233,9 @@ export async function createChallenge(
   category: string
 ): Promise<{ code: string; challengeId: string }> {
   await initDb();
-  let pool = await db.query.songs.findMany({ where: eq(songs.status, 'active') });
+  let pool = await db.query.songs.findMany({
+    where: and(eq(songs.status, 'active'), eq(songs.hasLyrics, 1)),
+  });
   if (category && category !== 'All') {
     const filtered = pool.filter((s) => s.genre.toLowerCase() === category.toLowerCase());
     if (filtered.length >= songCount) pool = filtered;
@@ -606,7 +612,7 @@ export async function searchSongs(query: string) {
   if (!query || query.trim().length < 1) return [];
 
   const allSongs = await db.query.songs.findMany({
-    where: eq(songs.status, 'active'),
+    where: and(eq(songs.status, 'active'), eq(songs.hasLyrics, 1)),
   });
 
   const matching = allSongs.filter(

@@ -33,6 +33,29 @@ function normalize(str) {
     .trim();
 }
 
+async function checkTrackLyrics(artist, title) {
+  try {
+    const url = `https://lrclib.net/api/get?artist_name=${encodeURIComponent(artist)}&track_name=${encodeURIComponent(title)}`;
+    const res = await fetch(url, { headers: { 'User-Agent': 'SongSprint/1.0' } });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.instrumental === true) return false;
+      if (data.plainLyrics && data.plainLyrics.trim().length > 10) return true;
+    }
+
+    const searchUrl = `https://lrclib.net/api/search?q=${encodeURIComponent(artist + ' ' + title)}`;
+    const searchRes = await fetch(searchUrl, { headers: { 'User-Agent': 'SongSprint/1.0' } });
+    if (searchRes.ok) {
+      const list = await searchRes.json();
+      const match = list.find((item) => !item.instrumental && item.plainLyrics && item.plainLyrics.trim().length > 10);
+      if (match) return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
 const CURATED_TRACKS = [
   // --- Modern Pop & Radio Megahits ---
   { query: 'The Weeknd Blinding Lights', tier: 'Easy', genre: 'Pop' },
@@ -45,7 +68,7 @@ const CURATED_TRACKS = [
   { query: 'Bruno Mars Mark Ronson Uptown Funk', tier: 'Easy', genre: 'Pop' },
   { query: 'Lady Gaga Poker Face', tier: 'Easy', genre: 'Pop' },
   { query: 'Katy Perry Roar', tier: 'Easy', genre: 'Pop' },
-  { query: 'The Kid LAROI Justin Bieber Stay', tier: 'Easy', genre: 'Pop' },
+  { query: 'The Kid LAROI STAY', tier: 'Easy', genre: 'Pop' },
   { query: 'Sia Chandelier', tier: 'Medium', genre: 'Pop' },
   { query: 'Shawn Mendes Camila Cabello Senorita', tier: 'Medium', genre: 'Pop' },
   { query: 'Ariana Grande 7 rings', tier: 'Medium', genre: 'Pop' },
@@ -66,7 +89,9 @@ const CURATED_TRACKS = [
   { query: 'Linkin Park In The End', tier: 'Easy', genre: 'Rock' },
   { query: 'Coldplay Viva La Vida', tier: 'Easy', genre: 'Rock' },
   { query: 'Imagine Dragons Believer', tier: 'Easy', genre: 'Rock' },
-  { query: 'Green Day Boulevard of Broken Dreams', tier: 'Medium', genre: 'Rock' },
+  { query: 'The Killers Mr Brightside', tier: 'Easy', genre: 'Rock' },
+  { query: 'Radiohead Creep', tier: 'Medium', genre: 'Rock' },
+  { query: 'Oasis Wonderwall', tier: 'Easy', genre: 'Rock' },
   { query: 'Survivor Eye of the Tiger', tier: 'Easy', genre: 'Rock' },
 
   // --- Hip-Hop & R&B ---
@@ -76,7 +101,7 @@ const CURATED_TRACKS = [
   { query: 'Kendrick Lamar HUMBLE', tier: 'Medium', genre: 'Hip-Hop' },
   { query: 'Post Malone Circles', tier: 'Easy', genre: 'Hip-Hop' },
   { query: '50 Cent In Da Club', tier: 'Easy', genre: 'Hip-Hop' },
-  { query: 'Snoop Dogg Drop It Like Its Hot', tier: 'Medium', genre: 'Hip-Hop' },
+  { query: 'Dr Dre Still DRE', tier: 'Medium', genre: 'Hip-Hop' },
   { query: 'Kanye West Stronger', tier: 'Easy', genre: 'Hip-Hop' },
   { query: 'Usher Yeah', tier: 'Easy', genre: 'R&B' },
   { query: 'Jay Z Alicia Keys Empire State of Mind', tier: 'Easy', genre: 'Hip-Hop' },
@@ -90,7 +115,7 @@ const CURATED_TRACKS = [
   { query: 'Calvin Harris Summer', tier: 'Easy', genre: 'Electronic' },
   { query: 'The Chainsmokers Closer', tier: 'Easy', genre: 'Electronic' },
   { query: 'David Guetta Sia Titanium', tier: 'Easy', genre: 'Electronic' },
-  { query: 'Martin Garrix Animals', tier: 'Medium', genre: 'Electronic' },
+  { query: 'Foster the People Pumped Up Kicks', tier: 'Easy', genre: 'Electronic' },
   { query: 'Swedish House Mafia Don t You Worry Child', tier: 'Medium', genre: 'Electronic' },
 
   // --- 80s & Retro Classics ---
@@ -108,9 +133,20 @@ const CURATED_TRACKS = [
 
 async function seedRealMusic() {
   console.log(`\n======================================================`);
-  console.log(`🎵 SongSprint Real Music Ingestion (iTunes API)`);
-  console.log(`Target: ${CURATED_TRACKS.length} iconic worldwide hits`);
+  console.log(`🎵 SongSprint Real Music Ingestion (iTunes API + Verified Lyrics)`);
+  console.log(`Target: ${CURATED_TRACKS.length} iconic worldwide vocal hits`);
+  console.log(`Requirement: All songs must have confirmed lyrics`);
   console.log(`======================================================\n`);
+
+  // Ensure has_lyrics column exists
+  try {
+    await client.execute(`ALTER TABLE songs ADD COLUMN has_lyrics INTEGER NOT NULL DEFAULT 1`);
+  } catch {
+    // Already exists
+  }
+
+  // Disable any synthetic or known instrumental tracks
+  await client.execute(`UPDATE songs SET has_lyrics = 0, status = 'disabled' WHERE id LIKE 'song-%'`);
 
   let addedCount = 0;
   const savedSongs = [];
@@ -141,15 +177,28 @@ async function seedRealMusic() {
       const genre = item.genre || track.primaryGenreName || 'Pop';
       const clipId = `clip-${songId}`;
 
-      // 1. Insert or update into songs table
+      // Strictly verify lyrics before saving as active
+      const hasLyrics = await checkTrackLyrics(primaryArtist, canonicalTitle);
+      if (!hasLyrics) {
+        console.warn(`${progress} ⚠ SKIPPED: "${primaryArtist} - ${canonicalTitle}" has NO lyrics or is instrumental`);
+        await client.execute({
+          sql: `UPDATE songs SET has_lyrics = 0, status = 'disabled' WHERE id = ?`,
+          args: [songId],
+        });
+        continue;
+      }
+
+      // 1. Insert or update into songs table (with has_lyrics = 1)
       await client.execute({
-        sql: `INSERT INTO songs (id, canonical_title, primary_artist, genre, difficulty_tier, status, metadata_version)
-              VALUES (?, ?, ?, ?, ?, 'active', 1)
+        sql: `INSERT INTO songs (id, canonical_title, primary_artist, genre, difficulty_tier, status, has_lyrics, metadata_version)
+              VALUES (?, ?, ?, ?, ?, 'active', 1, 1)
               ON CONFLICT(id) DO UPDATE SET
                 canonical_title = excluded.canonical_title,
                 primary_artist = excluded.primary_artist,
                 genre = excluded.genre,
-                status = 'active'`,
+                difficulty_tier = excluded.difficulty_tier,
+                status = 'active',
+                has_lyrics = 1`,
         args: [songId, canonicalTitle, primaryArtist, genre, item.tier],
       });
 
@@ -170,7 +219,6 @@ async function seedRealMusic() {
         args: [`alias-${songId}-canonical`, songId, normalize(canonicalTitle)],
       });
 
-      // Also index "Artist - Title" and original unstripped title for flexible search
       await client.execute({
         sql: `INSERT OR IGNORE INTO song_aliases (id, song_id, alias_type, normalized_value)
               VALUES (?, ?, 'title', ?)`,
@@ -187,9 +235,8 @@ async function seedRealMusic() {
 
       savedSongs.push({ id: songId, clipId, canonicalTitle, primaryArtist, tier: item.tier });
       addedCount++;
-      console.log(`${progress} ✓ ${primaryArtist} - "${canonicalTitle}" (${genre})`);
+      console.log(`${progress} ✓ ${primaryArtist} - "${canonicalTitle}" (${genre}) [Lyrics: Verified]`);
 
-      // Gentle pause to respect iTunes search rate limits
       await new Promise((r) => setTimeout(r, 120));
     } catch (err) {
       console.error(`${progress} ✗ Error processing "${item.query}":`, err.message);
@@ -197,15 +244,15 @@ async function seedRealMusic() {
   }
 
   console.log(`\n------------------------------------------------------`);
-  console.log(`Seeding complete: ${addedCount} real songs saved to SQLite!`);
+  console.log(`Seeding complete: ${addedCount} real songs with lyrics saved to SQLite!`);
   console.log(`------------------------------------------------------\n`);
 
-  // 4. Update today's Daily Puzzle with 5 iconic real songs
+  // 4. Update today's Daily Puzzle with 5 iconic real songs with lyrics
   if (savedSongs.length >= 5) {
     const todayUtc = new Date().toISOString().split('T')[0];
     const puzzleId = `daily-${todayUtc}`;
 
-    console.log(`Configuring Daily Puzzle for ${todayUtc} with real hits...`);
+    console.log(`Configuring Daily Puzzle for ${todayUtc} with real lyric hits...`);
 
     await client.execute({
       sql: `INSERT INTO daily_puzzles (id, puzzle_date, status, published_at)
@@ -214,7 +261,6 @@ async function seedRealMusic() {
       args: [puzzleId, todayUtc, Date.now()],
     });
 
-    // Pick 5 varied famous songs
     const topHits = [
       savedSongs.find((s) => s.canonicalTitle.includes('Blinding Lights')) || savedSongs[0],
       savedSongs.find((s) => s.canonicalTitle.includes('Bohemian Rhapsody')) || savedSongs[1],
@@ -223,7 +269,6 @@ async function seedRealMusic() {
       savedSongs.find((s) => s.canonicalTitle.includes('Take On Me')) || savedSongs[4],
     ].filter(Boolean);
 
-    // Clear and insert items
     await client.execute({
       sql: `DELETE FROM daily_puzzle_items WHERE daily_puzzle_id = ?`,
       args: [puzzleId],
@@ -236,10 +281,10 @@ async function seedRealMusic() {
               VALUES (?, ?, ?, ?, ?, ?)`,
         args: [`dpi-${puzzleId}-${pos + 1}`, puzzleId, pos + 1, s.id, s.clipId, s.tier],
       });
-      console.log(`  Round ${pos + 1}: ${s.primaryArtist} - ${s.canonicalTitle}`);
+      console.log(`  Round ${pos + 1}: ${s.primaryArtist} - ${s.canonicalTitle} (Lyrics verified)`);
     }
 
-    console.log(`\n✓ Today's Daily Puzzle is now armed with 5 real hits!`);
+    console.log(`\n✓ Today's Daily Puzzle is now armed with 5 real hits with lyrics!`);
   }
 }
 

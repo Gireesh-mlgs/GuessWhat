@@ -26,6 +26,7 @@ export const songs = sqliteTable('songs', {
   subgenre: text('subgenre'),
   difficultyTier: text('difficulty_tier').notNull(), // 'Easy' | 'Medium' | 'Hard' | 'Expert' | 'Impossible'
   status: text('status').notNull().default('active'),
+  hasLyrics: integer('has_lyrics').notNull().default(1), // 1 = has lyrics, 0 = no lyrics/instrumental
   metadataVersion: integer('metadata_version').notNull().default(1),
 });
 

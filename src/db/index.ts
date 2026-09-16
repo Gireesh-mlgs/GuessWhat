@@ -48,6 +48,7 @@ export async function initDb() {
       subgenre TEXT,
       difficulty_tier TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'active',
+      has_lyrics INTEGER NOT NULL DEFAULT 1,
       metadata_version INTEGER NOT NULL DEFAULT 1
     );
 
@@ -169,6 +170,12 @@ export async function initDb() {
       created_at INTEGER NOT NULL
     );
   `);
+
+  try {
+    await client.execute(`ALTER TABLE songs ADD COLUMN has_lyrics INTEGER NOT NULL DEFAULT 1`);
+  } catch {
+    // Column already exists
+  }
 
   initialized = true;
 }
