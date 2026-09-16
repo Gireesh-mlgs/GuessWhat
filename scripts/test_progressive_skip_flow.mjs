@@ -22,8 +22,8 @@ async function main() {
   console.log(`  ✓ Round 1 ID: ${round1.id}`);
   console.log(`  ✓ Initial: Opportunity ${round1.currentOpportunity}, duration: ${round1.currentDurationMs}ms, attemptCount: ${round1.attemptCount}`);
 
-  if (round1.currentOpportunity !== 1 || round1.currentDurationMs !== 100) {
-    throw new Error(`Expected Opportunity 1 (100ms), got ${round1.currentOpportunity} (${round1.currentDurationMs}ms)`);
+  if (round1.currentOpportunity !== 1 || round1.currentDurationMs !== 500) {
+    throw new Error(`Expected Opportunity 1 (500ms), got ${round1.currentOpportunity} (${round1.currentDurationMs}ms)`);
   }
 
   const authHeaders = {
@@ -31,8 +31,8 @@ async function main() {
     ...(cookie ? { Cookie: cookie } : {}),
   };
 
-  // 2. Click Skip on Opportunity 1 (0.1s) -> should unlock Opportunity 2 (0.5s) on SAME song
-  console.log('\n2. Testing Skip on Opportunity 1 (0.1s)...');
+  // 2. Click Skip on Opportunity 1 (0.5s) -> should unlock Opportunity 2 (1.0s) on SAME song
+  console.log('\n2. Testing Skip on Opportunity 1 (0.5s)...');
   const skip1Res = await fetch(`${BASE}/api/v1/rounds/${round1.id}/attempts`, {
     method: 'POST',
     headers: authHeaders,
@@ -46,12 +46,12 @@ async function main() {
   console.log(`  ✓ Round state: ${r1AfterSkip1.state} (must be 'unresolved')`);
   console.log(`  ✓ Now at: Opportunity ${r1AfterSkip1.currentOpportunity}, duration: ${r1AfterSkip1.currentDurationMs}ms, attemptCount: ${r1AfterSkip1.attemptCount}`);
 
-  if (r1AfterSkip1.state !== 'unresolved' || r1AfterSkip1.currentOpportunity !== 2 || r1AfterSkip1.currentDurationMs !== 500) {
-    throw new Error(`Expected unresolved Opportunity 2 (500ms), got state=${r1AfterSkip1.state}, opp=${r1AfterSkip1.currentOpportunity}, dur=${r1AfterSkip1.currentDurationMs}`);
+  if (r1AfterSkip1.state !== 'unresolved' || r1AfterSkip1.currentOpportunity !== 2 || r1AfterSkip1.currentDurationMs !== 1000) {
+    throw new Error(`Expected unresolved Opportunity 2 (1000ms), got state=${r1AfterSkip1.state}, opp=${r1AfterSkip1.currentOpportunity}, dur=${r1AfterSkip1.currentDurationMs}`);
   }
 
-  // 3. Click Skip on Opportunity 2 (0.5s) -> should unlock Opportunity 3 (1.0s)
-  console.log('\n3. Testing Skip on Opportunity 2 (0.5s)...');
+  // 3. Click Skip on Opportunity 2 (1.0s) -> should unlock Opportunity 3 (2.0s)
+  console.log('\n3. Testing Skip on Opportunity 2 (1.0s)...');
   const skip2Res = await fetch(`${BASE}/api/v1/rounds/${round1.id}/attempts`, {
     method: 'POST',
     headers: authHeaders,
@@ -61,12 +61,12 @@ async function main() {
   const r1AfterSkip2 = skip2Json.data.round;
   console.log(`  ✓ Now at: Opportunity ${r1AfterSkip2.currentOpportunity}, duration: ${r1AfterSkip2.currentDurationMs}ms, attemptCount: ${r1AfterSkip2.attemptCount}`);
 
-  if (r1AfterSkip2.state !== 'unresolved' || r1AfterSkip2.currentOpportunity !== 3 || r1AfterSkip2.currentDurationMs !== 1000) {
-    throw new Error(`Expected unresolved Opportunity 3 (1000ms), got opp=${r1AfterSkip2.currentOpportunity}, dur=${r1AfterSkip2.currentDurationMs}`);
+  if (r1AfterSkip2.state !== 'unresolved' || r1AfterSkip2.currentOpportunity !== 3 || r1AfterSkip2.currentDurationMs !== 2000) {
+    throw new Error(`Expected unresolved Opportunity 3 (2000ms), got opp=${r1AfterSkip2.currentOpportunity}, dur=${r1AfterSkip2.currentDurationMs}`);
   }
 
-  // 4. Click Skip on Opportunity 3 (1.0s) -> should unlock Opportunity 4 (2.0s)
-  console.log('\n4. Testing Skip on Opportunity 3 (1.0s)...');
+  // 4. Click Skip on Opportunity 3 (2.0s) -> should unlock Opportunity 4 (3.0s)
+  console.log('\n4. Testing Skip on Opportunity 3 (2.0s)...');
   const skip3Res = await fetch(`${BASE}/api/v1/rounds/${round1.id}/attempts`, {
     method: 'POST',
     headers: authHeaders,
@@ -76,8 +76,8 @@ async function main() {
   const r1AfterSkip3 = skip3Json.data.round;
   console.log(`  ✓ Now at: Opportunity ${r1AfterSkip3.currentOpportunity}, duration: ${r1AfterSkip3.currentDurationMs}ms, attemptCount: ${r1AfterSkip3.attemptCount}`);
 
-  if (r1AfterSkip3.state !== 'unresolved' || r1AfterSkip3.currentOpportunity !== 4 || r1AfterSkip3.currentDurationMs !== 2000) {
-    throw new Error(`Expected unresolved Opportunity 4 (2000ms), got opp=${r1AfterSkip3.currentOpportunity}, dur=${r1AfterSkip3.currentDurationMs}`);
+  if (r1AfterSkip3.state !== 'unresolved' || r1AfterSkip3.currentOpportunity !== 4 || r1AfterSkip3.currentDurationMs !== 3000) {
+    throw new Error(`Expected unresolved Opportunity 4 (3000ms), got opp=${r1AfterSkip3.currentOpportunity}, dur=${r1AfterSkip3.currentDurationMs}`);
   }
 
   // 5. Click Skip on Opportunity 4 (2.0s) -> should unlock Opportunity 5 (5.0s)

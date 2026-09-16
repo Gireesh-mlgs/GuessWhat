@@ -251,7 +251,7 @@ export default function UnlimitedPage() {
 
           {currentRound && (
             <>
-              {/* Opportunity Bar */}
+              {/* Opportunity Bar (0.5s to 5.0s) */}
               <OpportunityBar
                 currentOpportunity={currentRound.currentOpportunity}
                 attemptCount={currentRound.attemptCount}

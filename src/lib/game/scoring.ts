@@ -8,10 +8,10 @@ export interface OpportunityConfig {
 }
 
 export const REVEAL_SCHEDULE: OpportunityConfig[] = [
-  { opportunity: 1, durationSec: 0.1, durationMs: 100, basePoints: 5 },
-  { opportunity: 2, durationSec: 0.5, durationMs: 500, basePoints: 4 },
-  { opportunity: 3, durationSec: 1.0, durationMs: 1000, basePoints: 3 },
-  { opportunity: 4, durationSec: 2.0, durationMs: 2000, basePoints: 2 },
+  { opportunity: 1, durationSec: 0.5, durationMs: 500, basePoints: 5 },
+  { opportunity: 2, durationSec: 1.0, durationMs: 1000, basePoints: 4 },
+  { opportunity: 3, durationSec: 2.0, durationMs: 2000, basePoints: 3 },
+  { opportunity: 4, durationSec: 3.0, durationMs: 3000, basePoints: 2 },
   { opportunity: 5, durationSec: 5.0, durationMs: 5000, basePoints: 1 },
 ];
 

@@ -231,10 +231,10 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 space-y-2">
-            <div className="text-2xl font-black text-amber-700">0.1s &rarr; 5.0s</div>
+            <div className="text-2xl font-black text-amber-700">0.5s &rarr; 5.0s</div>
             <h4 className="font-black text-slate-900 text-base">Progressive Audio</h4>
             <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-              Start with a 0.1s micro-teaser (5 pts). Wrong guesses unlock 0.5s, 1.0s, 2.0s, and 5.0s clips.
+              Start with a 0.5s teaser (5 pts). Wrong guesses unlock 1.0s, 2.0s, 3.0s, and 5.0s clips.
             </p>
           </div>
 

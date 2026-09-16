@@ -259,7 +259,7 @@ export default function DailyPage() {
         </div>
       </div>
 
-      {/* Opportunity Bar (0.1s to 5.0s) */}
+      {/* Opportunity Bar (0.5s to 5.0s) */}
       {currentRound && (
         <div className="w-full z-10">
           <OpportunityBar
