@@ -83,8 +83,11 @@ export function RoundResultBanner({
             <div className="font-black text-slate-900 text-sm sm:text-base truncate">
               {correctAnswer.canonicalTitle}
             </div>
-            <div className="text-xs text-amber-900 font-bold truncate">
-              {correctAnswer.primaryArtist}
+            <div className="flex items-center gap-1.5 text-xs text-amber-950 font-bold truncate mt-0.5">
+              <span className="text-[10px] uppercase tracking-wider font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-950 border border-amber-300">
+                Artist
+              </span>
+              <span className="truncate">{correctAnswer.primaryArtist}</span>
             </div>
           </div>
         </div>
