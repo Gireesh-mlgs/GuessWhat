@@ -9,6 +9,20 @@ const nextConfig: NextConfig = {
     "*.local",
     "localhost",
   ],
+  async redirects() {
+    return [
+      {
+        source: "/daily",
+        destination: "/music/banger",
+        permanent: false,
+      },
+      {
+        source: "/unlimited",
+        destination: "/music/banger?mode=unlimited",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

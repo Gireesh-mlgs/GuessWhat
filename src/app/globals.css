@@ -1,5 +1,98 @@
 @import "tailwindcss";
 
+.font-script {
+  font-family: var(--font-caveat), 'Caveat', cursive, sans-serif;
+}
+
+.font-pixel {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+}
+
+/* Pixel Arcade Typography & Subtle Glow */
+.pixel-title-guess {
+  color: #FFFFFF;
+  text-shadow:
+    3px 3px 0px rgba(0, 0, 0, 0.95),
+    -1px -1px 0px rgba(255, 255, 255, 0.1);
+  letter-spacing: -0.01em;
+}
+
+.pixel-title-what {
+  color: #A8FF3E;
+  text-shadow:
+    0 0 10px rgba(168, 255, 62, 0.45),
+    0 0 24px rgba(168, 255, 62, 0.2),
+    3px 3px 0px rgba(0, 0, 0, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.pixel-navbar-brand {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.pixel-navbar-what {
+  color: #A8FF3E;
+  text-shadow: 0 0 8px rgba(168, 255, 62, 0.5);
+}
+
+@keyframes pixel-float-1 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.8; }
+  50% { transform: translate(3px, -4px); opacity: 1; }
+}
+
+@keyframes pixel-float-2 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+  50% { transform: translate(-3px, -3px); opacity: 0.95; }
+}
+
+@keyframes pixel-twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.animate-pixel-1 {
+  animation: pixel-float-1 3.5s ease-in-out infinite;
+}
+
+.animate-pixel-2 {
+  animation: pixel-float-2 4.2s ease-in-out infinite 0.7s;
+}
+
+.animate-pixel-twinkle {
+  animation: pixel-twinkle 2.4s ease-in-out infinite;
+}
+
+/* Slanted Editorial Panels System */
+@media (min-width: 1024px) {
+  .slanted-panel-slice {
+    transform: skewX(-7deg);
+    transform-origin: bottom center;
+    transition: all 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slanted-panel-content {
+    transform: skewX(7deg) scale(1.18);
+    transform-origin: bottom center;
+  }
+}
+
+/* Equalizer audio wave animation */
+@keyframes eq-wave-1 { 0%, 100% { height: 8px; } 50% { height: 28px; } }
+@keyframes eq-wave-2 { 0%, 100% { height: 18px; } 50% { height: 38px; } }
+@keyframes eq-wave-3 { 0%, 100% { height: 30px; } 50% { height: 14px; } }
+@keyframes eq-wave-4 { 0%, 100% { height: 12px; } 50% { height: 32px; } }
+@keyframes eq-wave-5 { 0%, 100% { height: 24px; } 50% { height: 10px; } }
+@keyframes eq-wave-6 { 0%, 100% { height: 14px; } 50% { height: 34px; } }
+@keyframes eq-wave-7 { 0%, 100% { height: 26px; } 50% { height: 16px; } }
+
+.eq-wave-bar-1 { animation: eq-wave-1 0.7s ease-in-out infinite; }
+.eq-wave-bar-2 { animation: eq-wave-2 0.85s ease-in-out infinite 0.1s; }
+.eq-wave-bar-3 { animation: eq-wave-3 0.65s ease-in-out infinite 0.2s; }
+.eq-wave-bar-4 { animation: eq-wave-4 0.9s ease-in-out infinite 0.15s; }
+.eq-wave-bar-5 { animation: eq-wave-5 0.75s ease-in-out infinite 0.05s; }
+.eq-wave-bar-6 { animation: eq-wave-6 0.8s ease-in-out infinite 0.25s; }
+.eq-wave-bar-7 { animation: eq-wave-7 0.7s ease-in-out infinite 0.18s; }
+
 @layer base {
   :root {
     --bg-main: #FEFCE8;
@@ -14,15 +107,10 @@
   }
 
   body {
-    background-color: #FFFDF0;
-    color: #0F172A;
+    background-color: #06080d;
+    color: #F8FAFC;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     min-height: 100vh;
-    background-image: 
-      radial-gradient(circle at 12% 15%, rgba(250, 204, 21, 0.14) 0%, transparent 45%),
-      radial-gradient(circle at 88% 20%, rgba(251, 146, 60, 0.10) 0%, transparent 40%),
-      radial-gradient(circle at 50% 80%, rgba(234, 179, 8, 0.12) 0%, transparent 50%);
-    background-attachment: fixed;
     overflow-x: hidden;
   }
 }
@@ -126,18 +214,283 @@
 .eq-bar-4 { animation: bounce-bar-4 0.85s ease-in-out infinite; }
 .eq-bar-5 { animation: bounce-bar-5 0.7s ease-in-out infinite; }
 
-/* Custom light yellow scrollbar */
+/* Custom dark scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #FEFCE8;
+  background: #06080d;
 }
 ::-webkit-scrollbar-thumb {
-  background: #FCD34D;
+  background: #1e293b;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #F59E0B;
+  background: #334155;
+}
+
+/* Continuous Moving Marquee Animations for Album Artwork */
+@keyframes marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 70s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 78s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-left-alt {
+  animation: marquee-left 64s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right-alt {
+  animation: marquee-right 72s linear infinite;
+  will-change: transform;
+}
+
+/* Cinematic Album Wall Animations */
+@keyframes album-drift-1 {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(-10px, -8px, 0) scale(1.02) rotate(0.8deg);
+  }
+  66% {
+    transform: translate3d(6px, 10px, 0) scale(0.99) rotate(-0.6deg);
+  }
+}
+
+@keyframes album-drift-2 {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(8px, 10px, 0) scale(0.99) rotate(-0.8deg);
+  }
+  66% {
+    transform: translate3d(-8px, -6px, 0) scale(1.025) rotate(0.7deg);
+  }
+}
+
+@keyframes album-drift-3 {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0px, -12px, 0) scale(1.015) rotate(0.5deg);
+  }
+}
+
+.animate-album-drift-1 {
+  animation: album-drift-1 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-album-drift-2 {
+  animation: album-drift-2 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-album-drift-3 {
+  animation: album-drift-3 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* iOS Glassmorphic Cards with Rainbow Hovering */
+@keyframes rainbow-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ios-glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  height: 360px;
+  border-radius: 22px;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ios-glass-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Rainbow Border Layer - 1.5px perimeter rim with hollow interior */
+.ios-glass-card .rainbow-border {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 23.5px;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    #ff3b30,
+    #ff9500,
+    #ffcc00,
+    #34c759,
+    #00c7be,
+    #007aff,
+    #5856d6,
+    #af52de,
+    #ff2d55,
+    #ff3b30
+  );
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Rainbow Ambient Glow */
+.ios-glass-card .rainbow-glow {
+  position: absolute;
+  inset: -3px;
+  border-radius: 25px;
+  background: linear-gradient(
+    135deg,
+    #ff3b30,
+    #ff9500,
+    #ffcc00,
+    #34c759,
+    #00c7be,
+    #007aff,
+    #5856d6,
+    #af52de,
+    #ff2d55,
+    #ff3b30
+  );
+  background-size: 300% 300%;
+  filter: blur(14px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ios-glass-card:hover .rainbow-border {
+  opacity: 1;
+  animation: rainbow-shift 4s ease infinite;
+}
+
+.ios-glass-card:hover .rainbow-glow {
+  opacity: 0.28;
+  animation: rainbow-shift 4s ease infinite;
+}
+
+/* Card Inner Glass Surface */
+.ios-glass-card .glass-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.ios-glass-card:hover .glass-inner {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Top Specular Sheen */
+.ios-glass-card .glass-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* iOS Glass Pill Button */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: all 0.25s ease;
+}
+
+.ios-glass-card:hover .glass-btn,
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-album-drift-1,
+  .animate-album-drift-2,
+  .animate-album-drift-3,
+  .animate-float-slow,
+  .animate-float-delayed {
+    animation: none !important;
+    transform: none !important;
+  }
+  .ios-glass-card:hover {
+    transform: none !important;
+  }
+  .ios-glass-card:hover .rainbow-border,
+  .ios-glass-card:hover .rainbow-glow {
+    animation: none !important;
+  }
 }

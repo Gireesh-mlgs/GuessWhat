@@ -43,7 +43,7 @@ export class PrecisionAudioPlayer {
     }
 
     if (ctx.state === 'suspended') {
-      ctx.resume().catch(() => {});
+      ctx.resume().catch(() => { });
     }
     return ctx;
   }
@@ -91,7 +91,7 @@ export class PrecisionAudioPlayer {
 
     const ctx = this.initAudioContext();
     if (ctx.state === 'suspended') {
-      await ctx.resume().catch(() => {});
+      await ctx.resume().catch(() => { });
     }
 
     // Stop current playback on this instance

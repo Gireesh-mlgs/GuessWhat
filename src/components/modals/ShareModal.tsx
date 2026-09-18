@@ -179,7 +179,7 @@ export function ShareModal({ session, currentStreak = 1 }: ShareModalProps) {
 
       {/* Navigation */}
       <div className="pt-2 flex items-center justify-center gap-5 text-xs font-black">
-        <Link href="/unlimited" className="text-amber-700 hover:text-amber-900">
+        <Link href="/music/banger?mode=unlimited" className="text-amber-700 hover:text-amber-900">
           Play Unlimited Practice &rarr;
         </Link>
         <Link href="/challenge/new" className="text-amber-700 hover:text-amber-900">

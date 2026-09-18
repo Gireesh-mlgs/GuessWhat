@@ -33,7 +33,9 @@ export function AudioWavePlayer({
   // Initialize and update player whenever audioUrl, startMs, or durationMs changes
   useEffect(() => {
     // Reset visual progress immediately
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgressRatio(0);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setErrorMessage(null);
 
     const player = new PrecisionAudioPlayer();
@@ -60,10 +62,10 @@ export function AudioWavePlayer({
       .load({ audioUrl, startMs, durationMs })
       .then(() => {
         if (autoPlay && playerRef.current === player) {
-          player.play().catch(() => {});
+          player.play().catch(() => { });
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     return () => {
       unsubState();
@@ -182,11 +184,10 @@ export function AudioWavePlayer({
           {[1, 2, 3, 4, 5, 4, 3, 2, 1].map((barIdx, i) => (
             <div
               key={i}
-              className={`w-2.5 rounded-full transition-all duration-100 ${
-                isPlaying
+              className={`w-2.5 rounded-full transition-all duration-100 ${isPlaying
                   ? `bg-gradient-to-t from-amber-400 via-yellow-400 to-orange-400 eq-bar-${barIdx}`
                   : 'bg-amber-100 h-2'
-              }`}
+                }`}
               style={{
                 height: isPlaying ? undefined : `${(i % 3) * 6 + 6}px`,
               }}
@@ -199,13 +200,12 @@ export function AudioWavePlayer({
           onClick={handlePlayToggle}
           disabled={disabled || isLoading}
           aria-label={isPlaying ? 'Pause audio' : playerState === 'ended' ? 'Replay audio' : 'Play audio'}
-          className={`group relative w-18 h-18 rounded-3xl flex items-center justify-center transition-all transform btn-tactile shadow-lg ${
-            disabled
+          className={`group relative w-18 h-18 rounded-3xl flex items-center justify-center transition-all transform btn-tactile shadow-lg ${disabled
               ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
               : isPlaying
-              ? 'bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-amber-500/40 scale-105 border-2 border-amber-600/30'
-              : 'bg-gradient-to-tr from-yellow-300 via-amber-400 to-amber-500 text-slate-950 font-black shadow-amber-400/40 hover:shadow-amber-400/60 hover:scale-105 active:scale-95 border-2 border-amber-400'
-          }`}
+                ? 'bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-amber-500/40 scale-105 border-2 border-amber-600/30'
+                : 'bg-gradient-to-tr from-yellow-300 via-amber-400 to-amber-500 text-slate-950 font-black shadow-amber-400/40 hover:shadow-amber-400/60 hover:scale-105 active:scale-95 border-2 border-amber-400'
+            }`}
         >
           {isLoading ? (
             <Loader2 className="w-8 h-8 animate-spin text-slate-950" />
@@ -225,10 +225,10 @@ export function AudioWavePlayer({
           {isLoading
             ? 'Loading snippet...'
             : isPlaying
-            ? '🎵 Playing audio snippet...'
-            : playerState === 'ended'
-            ? 'Tap to replay snippet'
-            : 'Tap to listen to clip'}
+              ? '🎵 Playing audio snippet...'
+              : playerState === 'ended'
+                ? 'Tap to replay snippet'
+                : 'Tap to listen to clip'}
         </span>
       </div>
 
