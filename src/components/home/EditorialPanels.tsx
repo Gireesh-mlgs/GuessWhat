@@ -148,7 +148,7 @@ export function EditorialPanels() {
                   }`}
                 />
 
-                {/* Lower Portion Content: Perfectly centered in the card */}
+                {/* Lower Portion Content: Positioned slightly to the left */}
                 <div
                   style={{
                     position: 'absolute',
@@ -157,6 +157,7 @@ export function EditorialPanels() {
                     bottom: 0,
                     margin: '0 auto',
                     width: '260px',
+                    transform: 'translateX(-18px)',
                   }}
                   className="pb-10 xl:pb-14 flex flex-col items-center text-center px-4"
                 >

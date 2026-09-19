@@ -63,6 +63,333 @@
   animation: pixel-twinkle 2.4s ease-in-out infinite;
 }
 
+/* Green Pixel-Art Retro Arcade Styling */
+.pixel-text-green {
+  color: #A8FF3E;
+  text-shadow: 2px 2px 0px #06080D, 0 0 12px rgba(168, 255, 62, 0.45);
+}
+
+.pixel-text-white {
+  color: #FFFFFF;
+  text-shadow: 2px 2px 0px #06080D, 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.pixel-arcade-card {
+  background: rgba(10, 15, 13, 0.85);
+  border: 2px solid #22c55e;
+  border-radius: 18px;
+  box-shadow: 
+    0 4px 0px #14532d,
+    0 8px 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(168, 255, 62, 0.2);
+  backdrop-filter: blur(12px);
+}
+
+.pixel-arcade-inner {
+  background: rgba(6, 10, 8, 0.92);
+  border: 1.5px solid rgba(168, 255, 62, 0.25);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Chunky 3D Arcade Pushbuttons */
+.arcade-btn-green {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #c7ff70 0%, #A8FF3E 50%, #8ae619 100%);
+  color: #06080d;
+  border: 2px solid #d7ff75;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #3f820c, 0 6px 16px rgba(168, 255, 62, 0.35);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-green:hover {
+  background: linear-gradient(180deg, #d8ff8a 0%, #b8ff4f 50%, #99f723 100%);
+  box-shadow: 0 4px 0px #3f820c, 0 0 20px rgba(168, 255, 62, 0.55);
+}
+
+.arcade-btn-green:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #3f820c, 0 2px 6px rgba(168, 255, 62, 0.3);
+}
+
+.arcade-btn-dark {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #18221c 0%, #0d1611 100%);
+  color: #d7ff75;
+  border: 2px solid #22c55e;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #0c331a, 0 6px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-dark:hover {
+  background: linear-gradient(180deg, #223328 0%, #132219 100%);
+  border-color: #A8FF3E;
+  color: #FFFFFF;
+  box-shadow: 0 4px 0px #0c331a, 0 0 14px rgba(168, 255, 62, 0.25);
+}
+
+.arcade-btn-dark:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #0c331a;
+}
+
+.arcade-badge {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1.5px solid rgba(168, 255, 62, 0.5);
+  background: rgba(168, 255, 62, 0.12);
+  color: #A8FF3E;
+  text-shadow: 1px 1px 0px #000;
+}
+
+/* Warm Orange Pixel-Art Retro Arcade Styling for Movies */
+.pixel-title-orange {
+  color: #FB923C;
+  text-shadow:
+    0 0 10px rgba(249, 115, 22, 0.5),
+    0 0 24px rgba(249, 115, 22, 0.25),
+    3px 3px 0px rgba(0, 0, 0, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.pixel-arcade-card-orange {
+  background: rgba(18, 12, 10, 0.88);
+  border: 2px solid #f97316;
+  border-radius: 18px;
+  box-shadow: 
+    0 4px 0px #9a3412,
+    0 8px 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(251, 146, 60, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.arcade-btn-orange {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #fdba74 0%, #fb923c 45%, #f97316 100%);
+  color: #06080d;
+  border: 2px solid #fed7aa;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #9a3412, 0 6px 16px rgba(249, 115, 22, 0.4);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-orange:hover {
+  background: linear-gradient(180deg, #fed7aa 0%, #fdba74 45%, #fb923c 100%);
+  box-shadow: 0 4px 0px #9a3412, 0 0 22px rgba(249, 115, 22, 0.6);
+}
+
+.arcade-btn-orange:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #9a3412, 0 2px 6px rgba(249, 115, 22, 0.3);
+}
+
+.arcade-btn-dark-orange {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #241612 0%, #170d0a 100%);
+  color: #fdba74;
+  border: 2px solid #f97316;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #7c2d12, 0 6px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-dark-orange:hover {
+  background: linear-gradient(180deg, #331d17 0%, #20100c 100%);
+  border-color: #fb923c;
+  color: #FFFFFF;
+  box-shadow: 0 4px 0px #7c2d12, 0 0 14px rgba(249, 115, 22, 0.3);
+}
+
+.arcade-btn-dark-orange:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #7c2d12;
+}
+
+.arcade-badge-orange {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1.5px solid rgba(249, 115, 22, 0.5);
+  background: rgba(249, 115, 22, 0.14);
+  color: #FB923C;
+  text-shadow: 1px 1px 0px #000;
+}
+
+/* Sky Blue & Beach Pixel-Art Retro Arcade Styling for Maps */
+.pixel-title-skyblue {
+  color: #38BDF8;
+  text-shadow:
+    0 0 10px rgba(56, 189, 248, 0.6),
+    0 0 24px rgba(56, 189, 248, 0.3),
+    3px 3px 0px rgba(0, 0, 0, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.pixel-arcade-card-beach {
+  background: rgba(8, 20, 32, 0.88);
+  border: 2px solid #38bdf8;
+  border-radius: 18px;
+  box-shadow: 
+    0 4px 0px #0284c7,
+    0 8px 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(186, 230, 253, 0.3);
+  backdrop-filter: blur(12px);
+}
+
+.arcade-btn-skyblue {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #bae6fd 0%, #38bdf8 50%, #0284c7 100%);
+  color: #06080d;
+  border: 2px solid #e0f2fe;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #0369a1, 0 6px 16px rgba(56, 189, 248, 0.45);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-skyblue:hover {
+  background: linear-gradient(180deg, #e0f2fe 0%, #7dd3fc 50%, #38bdf8 100%);
+  box-shadow: 0 4px 0px #0369a1, 0 0 22px rgba(56, 189, 248, 0.65);
+}
+
+.arcade-btn-skyblue:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #0369a1, 0 2px 6px rgba(56, 189, 248, 0.3);
+}
+
+.arcade-btn-dark-skyblue {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #10283c 0%, #081726 100%);
+  color: #7dd3fc;
+  border: 2px solid #38bdf8;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #034f77, 0 6px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-dark-skyblue:hover {
+  background: linear-gradient(180deg, #183854 0%, #0c2338 100%);
+  border-color: #bae6fd;
+  color: #FFFFFF;
+  box-shadow: 0 4px 0px #034f77, 0 0 14px rgba(56, 189, 248, 0.35);
+}
+
+.arcade-btn-dark-skyblue:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #034f77;
+}
+
+.arcade-badge-beach {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  background: rgba(56, 189, 248, 0.14);
+  color: #38BDF8;
+  text-shadow: 1px 1px 0px #000;
+}
+
+/* Gold Trophy Pixel-Art Retro Arcade Styling for Leaderboard */
+.pixel-title-gold {
+  color: #FACC15;
+  text-shadow:
+    0 0 10px rgba(250, 204, 21, 0.5),
+    0 0 24px rgba(234, 179, 8, 0.3),
+    3px 3px 0px rgba(0, 0, 0, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.pixel-arcade-card-gold {
+  background: rgba(18, 15, 8, 0.9);
+  border: 2px solid #eab308;
+  border-radius: 18px;
+  box-shadow: 
+    0 4px 0px #854d0e,
+    0 8px 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(253, 224, 71, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.arcade-btn-gold {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #eab308 100%);
+  color: #06080d;
+  border: 2px solid #fef9c3;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #854d0e, 0 6px 16px rgba(234, 179, 8, 0.45);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-gold:hover {
+  background: linear-gradient(180deg, #fef9c3 0%, #fde047 50%, #facc15 100%);
+  box-shadow: 0 4px 0px #854d0e, 0 0 22px rgba(250, 204, 21, 0.65);
+}
+
+.arcade-btn-gold:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #854d0e, 0 2px 6px rgba(234, 179, 8, 0.3);
+}
+
+.arcade-btn-dark-gold {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  background: linear-gradient(180deg, #26200c 0%, #171206 100%);
+  color: #fde047;
+  border: 2px solid #eab308;
+  border-radius: 14px;
+  box-shadow: 0 4px 0px #713f12, 0 6px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arcade-btn-dark-gold:hover {
+  background: linear-gradient(180deg, #362e10 0%, #221b08 100%);
+  border-color: #fef08a;
+  color: #FFFFFF;
+  box-shadow: 0 4px 0px #713f12, 0 0 14px rgba(250, 204, 21, 0.35);
+}
+
+.arcade-btn-dark-gold:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #713f12;
+}
+
+.arcade-badge-gold {
+  font-family: var(--font-pixel), 'Pixelify Sans', monospace, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1.5px solid rgba(250, 204, 21, 0.5);
+  background: rgba(250, 204, 21, 0.14);
+  color: #FACC15;
+  text-shadow: 1px 1px 0px #000;
+}
+
+.beach-ambient-bg {
+  background: 
+    radial-gradient(ellipse at 50% 100%, rgba(245, 158, 11, 0.22) 0%, rgba(234, 179, 8, 0.12) 20%, transparent 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.12) 40%, transparent 70%),
+    linear-gradient(to bottom, #06111c 0%, #081726 40%, #0c1c28 75%, #181c1c 100%);
+}
+
 /* Slanted Editorial Panels System */
 @media (min-width: 1024px) {
   .slanted-panel-slice {

@@ -148,33 +148,33 @@ export function AnswerSearchBox({
       {/* Friendly Prominent Prompt with visible Artist support */}
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
-            <span>What song is this?</span>
-            <span className="inline-block text-amber-500 font-black animate-bounce text-base">⚡</span>
+          <h2 className="font-pixel text-base sm:text-lg text-[#A8FF3E] flex items-center gap-2 tracking-wide uppercase">
+            <span>&gt; WHAT SONG IS THIS?</span>
+            <span className="inline-block text-[#d7ff75] animate-pulse">_</span>
           </h2>
           {selectedSong && (
-            <span className="text-[11px] font-black text-amber-950 bg-amber-200 px-3 py-0.5 rounded-full border border-amber-300 shadow-2xs">
-              Song selected
+            <span className="font-pixel text-[11px] text-[#06080d] bg-[#A8FF3E] px-2.5 py-0.5 rounded-md border border-[#d7ff75] shadow-[0_0_8px_rgba(168,255,62,0.5)] font-bold uppercase tracking-wider">
+              READY
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 text-xs font-bold text-amber-900/90 flex-wrap">
-          <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-950 px-2 py-0.5 rounded-md border border-amber-300 font-black text-[11px] shadow-2xs">
-            <span>🎤</span> Guess by Song or Artist Name
+        <div className="flex items-center gap-2 text-xs text-slate-300 flex-wrap">
+          <span className="inline-flex items-center gap-1 bg-[#102417] text-[#A8FF3E] px-2 py-0.5 rounded-md border border-[#22c55e]/50 font-pixel text-[11px]">
+            <span>[MIC]</span> TRACK OR ARTIST NAME
           </span>
-          <span className="text-slate-500 text-[11px]">Type either the track title or the artist</span>
+          <span className="text-slate-400 text-[11px]">Type either song name or artist</span>
         </div>
       </div>
 
       {/* Search Bar with Autocomplete Dropdown */}
       <div className={`relative ${shakeInput ? 'animate-wrong-shake' : ''}`}>
         <div className="relative flex items-center">
-          <Search className="absolute left-4 w-5 h-5 text-amber-600 pointer-events-none" />
+          <Search className="absolute left-4 w-5 h-5 text-[#A8FF3E] pointer-events-none" />
           <input
             type="text"
             value={query}
             disabled={disabled || isSubmitting}
-            placeholder="Guess by song title or artist name..."
+            placeholder="Type song title or artist name..."
             onChange={(e) => {
               handleQueryChange(e.target.value);
             }}
@@ -182,12 +182,12 @@ export function AnswerSearchBox({
             onFocus={() => {
               if (candidates.length > 0) setDropdownOpen(true);
             }}
-            className="w-full pl-12 pr-10 py-3.5 bg-white border-2 border-amber-300 rounded-2xl text-slate-900 placeholder-slate-400 font-bold text-sm sm:text-base shadow-xs focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all"
+            className="w-full pl-12 pr-10 py-3.5 bg-[#0a120e] border-2 border-[#22c55e] rounded-xl text-white placeholder-slate-500 font-bold text-sm sm:text-base shadow-[0_4px_0_#14532d,inset_0_2px_4px_rgba(0,0,0,0.6)] focus:outline-none focus:border-[#A8FF3E] focus:ring-4 focus:ring-[#A8FF3E]/20 transition-all"
             aria-label="Guess by song title or artist name"
             aria-autocomplete="list"
           />
           {isSearching && (
-            <Loader2 className="absolute right-4 w-5 h-5 animate-spin text-amber-600" />
+            <Loader2 className="absolute right-4 w-5 h-5 animate-spin text-[#A8FF3E]" />
           )}
         </div>
 
@@ -195,7 +195,7 @@ export function AnswerSearchBox({
         {dropdownOpen && candidates.length > 0 && (
           <ul
             role="listbox"
-            className="absolute left-0 right-0 top-full mt-2 bg-white border-2 border-amber-300 rounded-2xl shadow-xl overflow-hidden z-50 max-h-64 overflow-y-auto divide-y divide-amber-100"
+            className="absolute left-0 right-0 top-full mt-2 bg-[#090f0c] border-2 border-[#22c55e] rounded-xl shadow-2xl overflow-hidden z-50 max-h-64 overflow-y-auto divide-y divide-[#172e20]"
           >
             {candidates.map((song, idx) => {
               const isHighlighted = idx === highlightedIndex;
@@ -211,26 +211,26 @@ export function AnswerSearchBox({
                   onClick={() => handleSelect(song)}
                   onMouseEnter={() => setHighlightedIndex(idx)}
                   className={`px-4 py-3 flex items-center justify-between cursor-pointer transition-colors ${
-                    isHighlighted ? 'bg-amber-100 text-amber-950 font-bold' : 'hover:bg-amber-50/70 text-slate-800'
+                    isHighlighted ? 'bg-[#153320] text-white' : 'hover:bg-[#0e2115] text-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-xl bg-amber-200 border border-amber-300 flex items-center justify-center flex-shrink-0">
-                      <Music2 className="w-4 h-4 text-amber-900 stroke-[2.5]" />
+                    <div className="w-8 h-8 rounded-lg bg-[#14281c] border border-[#22c55e]/60 flex items-center justify-center shrink-0">
+                      <Music2 className="w-4 h-4 text-[#A8FF3E] stroke-[2.5]" />
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="font-black text-sm text-slate-900 truncate">{song.canonicalTitle}</span>
+                      <span className="font-black text-sm text-white truncate">{song.canonicalTitle}</span>
                       <div className="flex items-center gap-1.5 text-xs">
-                        <span className="text-[10px] uppercase tracking-wider font-black px-1.5 py-0.5 rounded bg-amber-200/80 text-amber-950 border border-amber-300/70">
-                          Artist
+                        <span className="text-[10px] uppercase font-pixel px-1.5 py-0.2 rounded bg-[#22c55e]/20 text-[#A8FF3E] border border-[#22c55e]/40">
+                          ARTIST
                         </span>
-                        <span className={`truncate ${isArtistMatch ? 'font-black text-amber-950 underline decoration-amber-400 decoration-2' : 'font-bold text-slate-600'}`}>
+                        <span className={`truncate ${isArtistMatch ? 'font-black text-[#A8FF3E] underline decoration-[#A8FF3E] decoration-2' : 'font-semibold text-slate-400'}`}>
                           {song.primaryArtist}
                         </span>
                       </div>
                     </div>
                   </div>
-                  <span className="text-[11px] px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-black border border-amber-200 flex-shrink-0 ml-2">
+                  <span className="text-[10px] px-2.5 py-1 rounded-md bg-[#102417] text-[#A8FF3E] font-pixel border border-[#22c55e]/40 shrink-0 ml-2 uppercase">
                     {song.genre}
                   </span>
                 </li>
@@ -246,28 +246,28 @@ export function AnswerSearchBox({
           type="button"
           onClick={onSkip}
           disabled={disabled || isSubmitting}
-          className="flex-1 py-3.5 px-4 rounded-2xl border-2 border-amber-300 hover:border-amber-400 bg-amber-50 hover:bg-amber-100 text-amber-950 text-sm font-black flex items-center justify-center gap-2 btn-tactile disabled:opacity-50 shadow-2xs"
+          className="flex-1 py-3.5 px-4 arcade-btn-dark text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <FastForward className="w-4 h-4 text-amber-700 stroke-[2.5]" />
-          <span>SKIP</span>
+          <FastForward className="w-4 h-4 text-[#A8FF3E] stroke-[2.5]" />
+          <span>SKIP &gt;&gt;</span>
         </button>
 
         <button
           type="button"
           onClick={handleSubmit}
           disabled={!isGuessReady || isSubmitting || disabled}
-          className={`flex-1 py-3.5 px-4 rounded-2xl text-sm font-black tracking-wide flex items-center justify-center gap-2 btn-tactile shadow-md ${
+          className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide flex items-center justify-center gap-2 ${
             isGuessReady && !disabled && !isSubmitting
-              ? 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 border-2 border-amber-400 shadow-amber-400/30 hover:shadow-amber-400/50 hover:scale-[1.02]'
-              : 'bg-amber-100/60 text-amber-900/40 border-2 border-amber-200 cursor-not-allowed'
+              ? 'arcade-btn-green'
+              : 'bg-[#121c15] text-slate-600 border-2 border-[#1e3325] rounded-xl cursor-not-allowed font-pixel'
           }`}
         >
           {isSubmitting ? (
-            <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
+            <Loader2 className="w-4 h-4 animate-spin text-[#06080d]" />
           ) : (
             <Check className="w-4 h-4 stroke-[3]" />
           )}
-          <span>GUESS</span>
+          <span>GUESS [ENTER]</span>
         </button>
       </div>
     </div>

@@ -84,49 +84,49 @@ export function ShareModal({ session, currentStreak = 1 }: ShareModalProps) {
   const countdownStr = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 
   return (
-    <div className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 text-center space-y-6 animate-in zoom-in-95 shadow-[0_12px_40px_rgba(245,158,11,0.12)]">
+    <div className="w-full max-w-md pixel-arcade-card p-6 sm:p-8 text-center space-y-6 animate-in zoom-in-95 shadow-[0_0_35px_rgba(34,197,94,0.25)]">
       {/* Trophy Badge */}
-      <div className="w-18 h-18 mx-auto rounded-3xl bg-amber-200 border-2 border-amber-400 p-1 flex items-center justify-center shadow-md shadow-amber-400/30">
-        <Trophy className="w-9 h-9 text-amber-950 stroke-[2.5]" />
+      <div className="w-18 h-18 mx-auto rounded-2xl bg-[#102417] border-2 border-[#22c55e] p-1 flex items-center justify-center shadow-[0_0_20px_rgba(168,255,62,0.4)]">
+        <Trophy className="w-9 h-9 text-[#A8FF3E] stroke-[2.5]" />
       </div>
 
       <div className="space-y-1">
-        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-          Sprint Completed! 🎉
+        <h2 className="font-pixel text-2xl sm:text-3xl text-white tracking-tight uppercase pixel-text-white">
+          SPRINT COMPLETED! ★
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 font-bold">
+        <p className="text-xs sm:text-sm text-slate-300 font-medium">
           Server-verified result recorded
         </p>
       </div>
 
       {/* Score & Streak Stats Cards */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-200">
-          <span className="text-[11px] font-black text-amber-900 uppercase tracking-wider block mb-1">
-            Total Score
+        <div className="p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28]">
+          <span className="font-pixel text-[11px] text-[#A8FF3E] uppercase tracking-wider block mb-1">
+            TOTAL SCORE
           </span>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900">
+          <div className="text-2xl sm:text-3xl font-black text-white font-pixel">
             {session.score}
-            <span className="text-xs text-amber-700 font-black ml-1">
+            <span className="text-xs text-slate-400 ml-1">
               / {session.maxPossibleScore}
             </span>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-amber-100/70 border-2 border-amber-300">
-          <span className="text-[11px] font-black text-amber-950 uppercase tracking-wider block mb-1 flex items-center justify-center gap-1">
-            <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" /> Daily Streak
+        <div className="p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28]">
+          <span className="font-pixel text-[11px] text-[#A8FF3E] uppercase tracking-wider mb-1 flex items-center justify-center gap-1">
+            <Flame className="w-3.5 h-3.5 text-[#A8FF3E] fill-[#A8FF3E]" /> DAILY STREAK
           </span>
-          <div className="text-2xl sm:text-3xl font-black text-amber-950">
-            {currentStreak} <span className="text-xs font-black text-amber-800">days</span>
+          <div className="text-2xl sm:text-3xl font-black text-[#A8FF3E] font-pixel">
+            {currentStreak} <span className="text-xs text-slate-400">DAYS</span>
           </div>
         </div>
       </div>
 
       {/* Spoiler-Safe Result Grid Card */}
-      <div className="p-4 rounded-2xl bg-amber-50/60 border-2 border-amber-200 space-y-2">
-        <span className="text-xs font-black text-amber-950 block">
-          Spoiler-Safe Results
+      <div className="p-4 rounded-xl bg-[#070d09] border-2 border-[#1d3d28] space-y-2">
+        <span className="font-pixel text-xs text-[#A8FF3E] uppercase tracking-wide block">
+          SPOILER-SAFE RESULTS
         </span>
         <div className="flex items-center justify-center gap-2 text-2xl">
           {session.rounds.map((r) => {
@@ -138,52 +138,52 @@ export function ShareModal({ session, currentStreak = 1 }: ShareModalProps) {
         </div>
       </div>
 
-      {/* Share Buttons in Yellow Fun Theme */}
+      {/* Share Buttons in Arcade Theme */}
       <div className="space-y-2.5 pt-1">
         <button
           onClick={handleNativeShare}
-          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-md shadow-amber-400/30 border-2 border-amber-500/40 btn-tactile"
+          className="w-full py-4 px-6 arcade-btn-green font-bold text-sm flex items-center justify-center gap-2"
         >
           {copied ? (
             <>
-              <Check className="w-4 h-4 text-emerald-800 stroke-[3]" />
-              <span>Copied to Clipboard!</span>
+              <Check className="w-4 h-4 text-[#06080d] stroke-[3]" />
+              <span>COPIED TO CLIPBOARD!</span>
             </>
           ) : (
             <>
-              <Share2 className="w-4 h-4 text-slate-950 stroke-[2.5]" />
-              <span>Share Result</span>
+              <Share2 className="w-4 h-4 text-[#06080d] stroke-[2.5]" />
+              <span>SHARE RESULT</span>
             </>
           )}
         </button>
 
         <button
           onClick={handleCopy}
-          className="w-full py-2.5 px-4 rounded-xl text-xs font-black text-amber-900 hover:text-slate-950 flex items-center justify-center gap-1.5 transition-colors"
+          className="w-full py-2.5 px-4 arcade-btn-dark text-xs font-bold flex items-center justify-center gap-1.5"
         >
           <Copy className="w-3.5 h-3.5" />
-          <span>Copy formatted text</span>
+          <span>COPY FORMATTED TEXT</span>
         </button>
       </div>
 
       {/* Next Daily Reset Countdown */}
       {session.mode === 'daily' && (
-        <div className="pt-2 border-t border-amber-200 flex items-center justify-center gap-2 text-xs text-amber-950 font-bold">
-          <Clock className="w-4 h-4 text-amber-600" />
-          <span>Next Daily in:</span>
-          <span className="font-mono font-black text-slate-900 text-sm tracking-wider">
+        <div className="pt-2 border-t border-[#1d3d28] flex items-center justify-center gap-2 text-xs text-slate-300">
+          <Clock className="w-4 h-4 text-[#A8FF3E]" />
+          <span className="font-pixel uppercase text-[11px] text-[#A8FF3E]">NEXT DAILY IN:</span>
+          <span className="font-mono font-black text-white text-sm tracking-wider">
             {countdownStr}
           </span>
         </div>
       )}
 
       {/* Navigation */}
-      <div className="pt-2 flex items-center justify-center gap-5 text-xs font-black">
-        <Link href="/music/banger?mode=unlimited" className="text-amber-700 hover:text-amber-900">
-          Play Unlimited Practice &rarr;
+      <div className="pt-2 flex items-center justify-center gap-5 text-xs font-pixel uppercase tracking-wide">
+        <Link href="/music/banger?mode=unlimited" className="text-[#A8FF3E] hover:underline">
+          UNLIMITED PRACTICE &rarr;
         </Link>
-        <Link href="/challenge/new" className="text-amber-700 hover:text-amber-900">
-          Challenge a Friend &rarr;
+        <Link href="/challenge/new" className="text-[#A8FF3E] hover:underline">
+          CHALLENGE A FRIEND &rarr;
         </Link>
       </div>
     </div>

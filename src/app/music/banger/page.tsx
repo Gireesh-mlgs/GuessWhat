@@ -212,7 +212,7 @@ function BangerGameContent() {
   if (dailyLoading && mode === 'daily' && !dailySession) {
     return (
       <div className="flex-1 flex items-center justify-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
+        <Loader2 className="w-10 h-10 animate-spin text-[#A8FF3E]" />
       </div>
     );
   }
@@ -226,47 +226,70 @@ function BangerGameContent() {
 
   return (
     <div className="relative flex-1 flex flex-col items-center px-4 py-6 sm:py-8 max-w-xl mx-auto w-full space-y-6">
-      {/* Floating yellow background doodles */}
+      {/* Floating green pixel background particles & retro arcade icons */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-        <span className="absolute top-20 left-[10%] text-3xl text-amber-300/80 select-none animate-float-slow">🎵</span>
-        <span className="absolute top-36 right-[12%] text-3xl text-yellow-400/90 select-none animate-float-delayed">⭐</span>
-        <span className="absolute bottom-40 left-[8%] text-3xl text-amber-400/80 select-none animate-float-delayed">🎶</span>
-        <span className="absolute bottom-28 right-[10%] text-3xl text-yellow-500/80 select-none animate-float-slow">❓</span>
-        <span className="absolute top-1/2 left-[5%] text-2xl text-amber-300/70 select-none animate-float-slow">•</span>
-        <span className="absolute top-1/3 right-[6%] text-xl text-yellow-400/80 select-none animate-float-delayed">✨</span>
+        <span className="absolute top-20 left-[10%] text-2xl text-[#A8FF3E]/40 select-none animate-float-slow font-pixel">🎵</span>
+        <span className="absolute top-36 right-[12%] text-2xl text-[#d7ff75]/40 select-none animate-float-delayed font-pixel">★</span>
+        <span className="absolute bottom-40 left-[8%] text-2xl text-[#22c55e]/40 select-none animate-float-delayed font-pixel">🎶</span>
+        <span className="absolute bottom-28 right-[10%] text-2xl text-[#A8FF3E]/40 select-none animate-float-slow font-pixel">?</span>
+        <span className="absolute top-1/2 left-[5%] text-xl text-[#A8FF3E]/30 select-none animate-float-slow">👾</span>
+        <span className="absolute top-1/3 right-[6%] text-xl text-[#d7ff75]/30 select-none animate-float-delayed">🕹️</span>
+        <div className="absolute top-1/4 left-1/3 w-1.5 h-1.5 bg-[#A8FF3E] animate-pixel-1 pointer-events-none rounded-xs shadow-[0_0_8px_#A8FF3E]" />
+        <div className="absolute bottom-1/3 right-1/4 w-2 h-2 bg-[#d7ff75] animate-pixel-2 pointer-events-none rounded-xs shadow-[0_0_10px_#d7ff75]" />
+        <div className="absolute top-2/3 left-1/5 w-1 h-1 bg-[#A8FF3E] animate-pixel-twinkle pointer-events-none rounded-xs" />
       </div>
 
       {/* Navigation & Mode Switcher Bar */}
       <div className="w-full flex items-center justify-between z-10">
         <Link
           href="/music"
-          className="inline-flex items-center gap-1.5 text-xs font-black text-slate-600 hover:text-amber-600 transition-colors"
+          className="inline-flex items-center gap-1.5 font-pixel text-xs text-slate-400 hover:text-[#A8FF3E] transition-colors uppercase tracking-wider"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Music Games</span>
+          <span>&lt; MUSIC GAMES</span>
         </Link>
 
-        {/* Mode Selector */}
-        <div className="flex items-center gap-1 p-1 bg-amber-100/90 rounded-2xl border-2 border-amber-300 shadow-2xs">
+        {/* Arcade Mode Selector */}
+        <div className="flex items-center gap-1 p-1 bg-[#09110d] rounded-xl border-2 border-[#22c55e]/60 shadow-[0_2px_0_#14532d]">
           <button
             onClick={() => setMode('daily')}
-            className={`px-3 py-1 rounded-xl text-xs font-black transition-all ${mode === 'daily'
-                ? 'bg-amber-400 text-slate-950 border border-amber-500 shadow-xs'
-                : 'text-amber-900 hover:text-slate-950'
-              }`}
+            className={`px-3 py-1 rounded-lg text-xs font-pixel uppercase tracking-wider transition-all ${
+              mode === 'daily'
+                ? 'bg-[#A8FF3E] text-[#06080d] font-bold shadow-[0_0_10px_rgba(168,255,62,0.6)]'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
-            ⚡ Daily
+            ⚡ DAILY
           </button>
           <button
             onClick={() => setMode('unlimited')}
-            className={`px-3 py-1 rounded-xl text-xs font-black transition-all ${mode === 'unlimited'
-                ? 'bg-amber-400 text-slate-950 border border-amber-500 shadow-xs'
-                : 'text-amber-900 hover:text-slate-950'
-              }`}
+            className={`px-3 py-1 rounded-lg text-xs font-pixel uppercase tracking-wider transition-all ${
+              mode === 'unlimited'
+                ? 'bg-[#A8FF3E] text-[#06080d] font-bold shadow-[0_0_10px_rgba(168,255,62,0.6)]'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
-            🎵 Practice
+            🎵 PRACTICE
           </button>
         </div>
+      </div>
+
+      {/* Arcade Game Hero Title Header */}
+      <div className="w-full text-center space-y-2 z-10 select-none pt-1">
+        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-md arcade-badge text-[11px] font-bold">
+          <span className="w-2 h-2 rounded-xs bg-[#A8FF3E] animate-pulse" />
+          <span>STAGE 1 • COIN-OP AUDIO GAME</span>
+        </div>
+        
+        <h1 className="font-pixel text-4xl sm:text-5xl uppercase tracking-tight leading-none">
+          <span className="pixel-title-guess">GUESS THE </span>
+          <span className="pixel-title-what">SONG</span>
+          <span className="text-[#d7ff75] text-2xl sm:text-3xl ml-1 animate-pixel-twinkle">?</span>
+        </h1>
+
+        <p className="text-xs sm:text-sm text-slate-300 font-medium">
+          Identify tracks from sub-second audio clips &bull; Build your daily streak
+        </p>
       </div>
 
       {/* ============================================================ */}
@@ -276,27 +299,27 @@ function BangerGameContent() {
         <>
           {/* Daily Pre-Game: Tier Selection */}
           {!dailySession && (
-            <div className="relative z-10 w-full flex justify-center pt-4">
+            <div className="relative z-10 w-full flex justify-center pt-2">
               <TierSelector
                 selectedTier={selectedDailyTier}
                 onSelectTier={setSelectedDailyTier}
                 onConfirm={handleStartDaily}
                 isLoading={dailyLoading}
-                modeLabel="Guess the Banger ⚡"
+                modeLabel="Daily Sprint ⚡"
               />
             </div>
           )}
 
           {/* Daily Completed Screen: Share Modal */}
           {dailySession && (dailySession.status === 'completed' || hasCompletedToday) && (
-            <div className="relative z-10 w-full flex flex-col items-center justify-center space-y-4 pt-4">
+            <div className="relative z-10 w-full flex flex-col items-center justify-center space-y-4 pt-2">
               <ShareModal session={dailySession} currentStreak={currentStreak} />
               <button
                 onClick={() => setMode('unlimited')}
-                className="inline-flex items-center gap-2 text-xs font-black text-amber-900 bg-amber-100 hover:bg-amber-200 border-2 border-amber-300 px-4 py-2 rounded-2xl transition-all shadow-xs"
+                className="inline-flex items-center gap-2 arcade-btn-dark px-5 py-2.5 rounded-xl text-xs font-bold transition-all"
               >
-                <Play className="w-4 h-4 fill-current" />
-                <span>Keep Playing with Practice Mode</span>
+                <Play className="w-4 h-4 fill-current text-[#A8FF3E]" />
+                <span>PLAY UNLIMITED PRACTICE MODE</span>
               </button>
             </div>
           )}
@@ -305,12 +328,12 @@ function BangerGameContent() {
           {dailySession && dailySession.status !== 'completed' && !hasCompletedToday && (
             <div className="w-full space-y-5 z-10">
               {/* Header Bar */}
-              <div className="w-full flex items-center justify-between text-xs font-bold text-slate-600">
+              <div className="w-full flex items-center justify-between text-xs font-bold text-slate-300">
                 <div className="flex items-center gap-2">
-                  <span className="px-3.5 py-1 rounded-full bg-amber-100 border-2 border-amber-300 text-amber-950 font-black shadow-2xs">
-                    Song {dailySession.activeRoundIndex + 1} of {dailySession.rounds.length}
+                  <span className="px-3 py-1 rounded-lg bg-[#0a140e] border border-[#22c55e]/60 text-[#A8FF3E] font-pixel text-[11px] uppercase tracking-wider shadow-[0_0_8px_rgba(34,197,94,0.2)]">
+                    SONG {dailySession.activeRoundIndex + 1} / {dailySession.rounds.length}
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-white text-amber-900 border-2 border-amber-200 font-black">
+                  <span className="px-3 py-1 rounded-lg bg-[#060c08] text-slate-300 border border-[#1d3d28] font-pixel text-[11px] uppercase tracking-wider">
                     {dailySession.difficultyTier}
                   </span>
                 </div>
@@ -319,19 +342,19 @@ function BangerGameContent() {
                 <div className="flex items-center gap-1.5 py-1">
                   {dailySession.rounds.map((r, idx) => {
                     const isCurrent = idx === dailySession.activeRoundIndex;
-                    let dotStyle = 'bg-amber-100 border-amber-200';
+                    let dotStyle = 'bg-[#0e1c12] border-[#1d3d28]';
                     if (r.state === 'correct') {
-                      dotStyle = 'bg-emerald-500 border-emerald-600 shadow-sm';
+                      dotStyle = 'bg-[#22c55e] border-[#A8FF3E] shadow-[0_0_8px_#22c55e]';
                     } else if (r.state === 'skipped' || r.state === 'exhausted') {
-                      dotStyle = 'bg-rose-400 border-rose-500';
+                      dotStyle = 'bg-rose-500 border-rose-400';
                     } else if (isCurrent) {
-                      dotStyle = 'bg-amber-500 border-amber-600 ring-4 ring-amber-200 animate-pulse';
+                      dotStyle = 'bg-[#A8FF3E] border-[#d7ff75] ring-2 ring-[#A8FF3E]/50 animate-pulse shadow-[0_0_10px_#A8FF3E]';
                     }
 
                     return (
                       <div
                         key={r.id}
-                        className={`w-3.5 h-3.5 rounded-full border transition-all ${dotStyle}`}
+                        className={`w-3.5 h-3.5 rounded-xs border transition-all ${dotStyle}`}
                         title={`Song ${idx + 1}: ${r.state}`}
                       />
                     );
@@ -342,32 +365,33 @@ function BangerGameContent() {
               {/* Stats Bar */}
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3 w-full">
                 <div
-                  className={`p-3 sm:p-4 rounded-3xl bg-amber-100/90 border-2 border-amber-300 shadow-[0_4px_16px_rgba(245,158,11,0.12)] flex flex-col items-center justify-center text-center transition-all ${streakPopping ? 'animate-streak-pop ring-4 ring-amber-400 scale-105' : ''
-                    }`}
+                  className={`p-3 sm:p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28] shadow-[0_4px_0_#14532d] flex flex-col items-center justify-center text-center transition-all ${
+                    streakPopping ? 'animate-streak-pop ring-2 ring-[#A8FF3E] scale-105' : ''
+                  }`}
                 >
-                  <span className="text-[11px] sm:text-xs font-black text-amber-950 uppercase tracking-wider flex items-center gap-1">
-                    <span>🔥</span> Streak
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#A8FF3E] uppercase tracking-wider flex items-center gap-1">
+                    <span>🔥</span> STREAK
                   </span>
-                  <span className="text-2xl sm:text-3xl font-black text-slate-950 mt-0.5">
+                  <span className="text-2xl sm:text-3xl font-black text-white font-pixel mt-0.5">
                     {currentStreak}
                   </span>
                 </div>
 
-                <div className="p-3 sm:p-4 rounded-3xl bg-yellow-100/90 border-2 border-yellow-300 shadow-[0_4px_16px_rgba(234,179,8,0.12)] flex flex-col items-center justify-center text-center">
-                  <span className="text-[11px] sm:text-xs font-black text-yellow-950 uppercase tracking-wider flex items-center gap-1">
-                    <span>⭐</span> Score
+                <div className="p-3 sm:p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28] shadow-[0_4px_0_#14532d] flex flex-col items-center justify-center text-center">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#A8FF3E] uppercase tracking-wider flex items-center gap-1">
+                    <span>★</span> SCORE
                   </span>
-                  <span className="text-2xl sm:text-3xl font-black text-slate-950 mt-0.5">
+                  <span className="text-2xl sm:text-3xl font-black text-white font-pixel mt-0.5">
                     {dailySession.score}
                   </span>
                 </div>
 
-                <div className="p-3 sm:p-4 rounded-3xl bg-amber-50 border-2 border-amber-200 shadow-[0_4px_16px_rgba(245,158,11,0.08)] flex flex-col items-center justify-center text-center">
-                  <span className="text-[11px] sm:text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1">
-                    <span>🎯</span> Mode
+                <div className="p-3 sm:p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28] shadow-[0_4px_0_#14532d] flex flex-col items-center justify-center text-center">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#A8FF3E] uppercase tracking-wider flex items-center gap-1">
+                    <span>⚡</span> MODE
                   </span>
-                  <span className="text-lg sm:text-xl font-black text-slate-900 mt-0.5">
-                    Daily ⚡
+                  <span className="text-lg sm:text-xl font-bold text-[#A8FF3E] font-pixel mt-0.5">
+                    DAILY
                   </span>
                 </div>
               </div>
@@ -428,28 +452,31 @@ function BangerGameContent() {
         <div className="w-full space-y-5 z-10">
           {/* Practice setup if unstarted */}
           {!unlimitedSession ? (
-            <div className="w-full bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-[0_10px_35px_rgba(245,158,11,0.12)] space-y-6">
+            <div className="w-full pixel-arcade-card p-6 sm:p-8 space-y-6">
               <div className="text-center space-y-1">
-                <h2 className="text-2xl font-black text-slate-900">Unlimited Practice</h2>
-                <p className="text-xs sm:text-sm text-slate-600 font-bold">
+                <h2 className="font-pixel text-2xl sm:text-3xl text-white uppercase pixel-text-white">
+                  UNLIMITED PRACTICE
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 font-medium">
                   Train your musical reflexes with endless audio clips
                 </p>
               </div>
 
               {/* Category Filter */}
               <div className="space-y-2">
-                <label className="text-xs font-black text-amber-950 uppercase tracking-wider block">
-                  Genre / Category
+                <label className="font-pixel text-xs text-[#A8FF3E] uppercase tracking-wider block">
+                  GENRE / CATEGORY
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all btn-tactile ${selectedCategory === cat
-                          ? 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-xs scale-105'
-                          : 'bg-amber-50/70 text-amber-950 hover:bg-amber-100 border-2 border-amber-200'
-                        }`}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-pixel uppercase transition-all ${
+                        selectedCategory === cat
+                          ? 'bg-[#A8FF3E] text-[#06080d] font-bold shadow-[0_0_12px_#A8FF3E] border-2 border-[#d7ff75] scale-105'
+                          : 'arcade-btn-dark'
+                      }`}
                     >
                       {cat}
                     </button>
@@ -459,18 +486,19 @@ function BangerGameContent() {
 
               {/* Tier Selection */}
               <div className="space-y-2">
-                <label className="text-xs font-black text-amber-950 uppercase tracking-wider block">
-                  Difficulty Tier
+                <label className="font-pixel text-xs text-[#A8FF3E] uppercase tracking-wider block">
+                  DIFFICULTY TIER
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['Easy', 'Medium', 'Hard'] as DifficultyTier[]).map((tier) => (
                     <button
                       key={tier}
                       onClick={() => setSelectedUnlimitedTier(tier)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-black transition-all btn-tactile ${selectedUnlimitedTier === tier
-                          ? 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-xs scale-105'
-                          : 'bg-amber-50/70 text-amber-950 hover:bg-amber-100 border-2 border-amber-200'
-                        }`}
+                      className={`py-2.5 px-3 rounded-xl text-xs font-pixel uppercase transition-all ${
+                        selectedUnlimitedTier === tier
+                          ? 'bg-[#A8FF3E] text-[#06080d] font-bold shadow-[0_0_12px_#A8FF3E] border-2 border-[#d7ff75] scale-105'
+                          : 'arcade-btn-dark'
+                      }`}
                     >
                       {tier}
                     </button>
@@ -482,14 +510,14 @@ function BangerGameContent() {
               <button
                 onClick={handleStartUnlimited}
                 disabled={unlimitedLoading}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black text-base flex items-center justify-center gap-2 shadow-lg shadow-amber-400/30 border-2 border-amber-500/50 btn-tactile"
+                className="w-full py-4 arcade-btn-green text-base font-bold flex items-center justify-center gap-2"
               >
                 {unlimitedLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin text-[#06080d]" />
                 ) : (
                   <>
-                    <Play className="w-5 h-5 fill-slate-950" />
-                    <span>Start Practice Round</span>
+                    <Play className="w-5 h-5 fill-[#06080d] text-[#06080d]" />
+                    <span>START PRACTICE ROUND ➜</span>
                   </>
                 )}
               </button>
@@ -500,45 +528,45 @@ function BangerGameContent() {
               {/* Top Bar with Reset button */}
               <div className="flex items-center justify-between text-xs font-bold">
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-amber-100 border-2 border-amber-300 text-amber-950 font-black">
-                    Round {practiceStats.roundsPlayed + 1}
+                  <span className="px-3 py-1 rounded-lg bg-[#0a140e] border border-[#22c55e]/60 text-[#A8FF3E] font-pixel text-[11px] uppercase tracking-wider">
+                    ROUND {practiceStats.roundsPlayed + 1}
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-white text-amber-900 border-2 border-amber-200 font-black">
+                  <span className="px-3 py-1 rounded-lg bg-[#060c08] text-slate-300 border border-[#1d3d28] font-pixel text-[11px] uppercase tracking-wider">
                     {unlimitedSession.difficultyTier} &bull; {selectedCategory}
                   </span>
                 </div>
                 <button
                   onClick={() => setUnlimitedSession(null)}
-                  className="inline-flex items-center gap-1 text-xs font-black text-amber-950 px-3 py-1 rounded-xl border border-amber-300 bg-white hover:bg-amber-50"
+                  className="inline-flex items-center gap-1 font-pixel text-xs text-[#A8FF3E] px-3 py-1 rounded-lg border border-[#22c55e]/50 bg-[#09110d] hover:bg-[#102417] uppercase"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
-                  <span>New Setup</span>
+                  <span>NEW SETUP</span>
                 </button>
               </div>
 
               {/* Practice Stats */}
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3 w-full">
-                <div className="p-3 sm:p-4 rounded-3xl bg-amber-100/90 border-2 border-amber-300 shadow-xs flex flex-col items-center justify-center text-center">
-                  <span className="text-[11px] sm:text-xs font-black text-amber-950 uppercase tracking-wider">
-                    🔥 Streak
+                <div className="p-3 sm:p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28] shadow-[0_4px_0_#14532d] flex flex-col items-center justify-center text-center">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#A8FF3E] uppercase tracking-wider">
+                    🔥 STREAK
                   </span>
-                  <span className="text-2xl sm:text-3xl font-black text-slate-950 mt-0.5">
+                  <span className="text-2xl sm:text-3xl font-black text-white font-pixel mt-0.5">
                     {practiceStats.streak}
                   </span>
                 </div>
-                <div className="p-3 sm:p-4 rounded-3xl bg-yellow-100/90 border-2 border-yellow-300 shadow-xs flex flex-col items-center justify-center text-center">
-                  <span className="text-[11px] sm:text-xs font-black text-yellow-950 uppercase tracking-wider">
-                    ⭐ Score
+                <div className="p-3 sm:p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28] shadow-[0_4px_0_#14532d] flex flex-col items-center justify-center text-center">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#A8FF3E] uppercase tracking-wider">
+                    ★ SCORE
                   </span>
-                  <span className="text-2xl sm:text-3xl font-black text-slate-950 mt-0.5">
+                  <span className="text-2xl sm:text-3xl font-black text-white font-pixel mt-0.5">
                     {practiceStats.totalScore}
                   </span>
                 </div>
-                <div className="p-3 sm:p-4 rounded-3xl bg-amber-50 border-2 border-amber-200 shadow-xs flex flex-col items-center justify-center text-center">
-                  <span className="text-[11px] sm:text-xs font-black text-amber-900 uppercase tracking-wider">
-                    🎯 Accuracy
+                <div className="p-3 sm:p-4 rounded-xl bg-[#09110d] border-2 border-[#1d3d28] shadow-[0_4px_0_#14532d] flex flex-col items-center justify-center text-center">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#A8FF3E] uppercase tracking-wider">
+                    🎯 ACCURACY
                   </span>
-                  <span className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
+                  <span className="text-2xl sm:text-3xl font-black text-[#A8FF3E] font-pixel mt-0.5">
                     {practiceStats.roundsPlayed > 0
                       ? Math.round((practiceStats.correctCount / practiceStats.roundsPlayed) * 100)
                       : 0}
@@ -604,7 +632,7 @@ export default function GuessTheBangerPage() {
     <Suspense
       fallback={
         <div className="flex-1 flex items-center justify-center py-20">
-          <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
+          <Loader2 className="w-10 h-10 animate-spin text-[#A8FF3E]" />
         </div>
       }
     >

@@ -22,16 +22,16 @@ export function TierSelector({
   const tiers: DifficultyTier[] = ['Easy', 'Medium', 'Hard', 'Expert', 'Impossible'];
 
   return (
-    <div className="w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-[0_10px_35px_rgba(245,158,11,0.12)] space-y-6 animate-in fade-in">
+    <div className="w-full max-w-lg pixel-arcade-card p-6 sm:p-8 space-y-6 animate-in fade-in">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-200 border-2 border-amber-400 text-amber-950 text-xs font-black uppercase tracking-wider">
-          <Zap className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
-          Choose Your Stakes
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md arcade-badge text-[11px] font-bold">
+          <Zap className="w-3.5 h-3.5 text-[#A8FF3E] fill-[#A8FF3E]" />
+          <span>CHOOSE YOUR STAKES</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-          Select Difficulty
+        <h2 className="font-pixel text-2xl sm:text-3xl text-white tracking-tight uppercase pixel-text-white">
+          SELECT DIFFICULTY
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 font-bold">
+        <p className="text-xs sm:text-sm text-slate-300 font-medium">
           Tier is locked for your {modeLabel} run. Higher tiers award bigger score multipliers!
         </p>
       </div>
@@ -45,38 +45,38 @@ export function TierSelector({
             <div
               key={tier}
               onClick={() => onSelectTier(tier)}
-              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start justify-between gap-4 ${
+              className={`p-3.5 sm:p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start justify-between gap-4 ${
                 isSelected
-                  ? 'bg-amber-100/80 border-amber-500 ring-4 ring-amber-300/80 shadow-xs'
-                  : 'bg-white border-amber-200 hover:border-amber-300 hover:bg-amber-50/60 text-slate-700'
+                  ? 'bg-[#153120] border-[#A8FF3E] shadow-[0_0_16px_rgba(168,255,62,0.3)]'
+                  : 'bg-[#0a120e] border-[#1d3d28] hover:border-[#22c55e] text-slate-300'
               }`}
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className={`font-black text-base ${isSelected ? 'text-amber-950' : 'text-slate-800'}`}>
+                  <span className={`font-pixel text-base uppercase ${isSelected ? 'text-[#A8FF3E]' : 'text-white'}`}>
                     {tier}
                   </span>
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-full font-black ${
+                    className={`text-[10px] px-2 py-0.5 rounded-md font-pixel uppercase ${
                       isSelected
-                        ? 'bg-amber-400 text-slate-950 border border-amber-500/40 shadow-xs'
-                        : 'bg-amber-100 text-amber-900'
+                        ? 'bg-[#A8FF3E] text-[#06080d] font-bold shadow-[0_0_8px_#A8FF3E]'
+                        : 'bg-[#14281c] text-[#A8FF3E] border border-[#22c55e]/40'
                     }`}
                   >
-                    {info.multiplier}× Multiplier
+                    {info.multiplier}× MULTIPLIER
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 font-semibold leading-relaxed">
+                <p className="text-xs text-slate-400 font-medium leading-relaxed">
                   {info.description}
                 </p>
               </div>
 
               <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${
-                  isSelected ? 'border-amber-500 bg-amber-400' : 'border-amber-300 bg-white'
+                className={`w-5 h-5 rounded-md border-2 flex items-center justify-center mt-0.5 shrink-0 ${
+                  isSelected ? 'border-[#A8FF3E] bg-[#A8FF3E]' : 'border-[#22c55e]/50 bg-[#060c08]'
                 }`}
               >
-                {isSelected && <div className="w-2 h-2 rounded-full bg-slate-950" />}
+                {isSelected && <div className="w-2 h-2 bg-[#06080d] rounded-xs" />}
               </div>
             </div>
           );
@@ -87,15 +87,15 @@ export function TierSelector({
         <button
           onClick={onConfirm}
           disabled={isLoading}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black text-base flex items-center justify-center gap-2 shadow-md shadow-amber-400/30 border-2 border-amber-500/40 btn-tactile"
+          className="w-full py-4 arcade-btn-green text-base font-bold flex items-center justify-center gap-2"
         >
-          <span>Lock In & Start Sprint ⚡</span>
+          <span>LOCK IN &amp; START SPRINT ⚡</span>
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-2 text-[11px] text-amber-900/80 font-bold">
-        <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
-        <span>Server-verified fair scoring snapshot version 1.0</span>
+      <div className="flex items-center justify-center gap-2 text-[11px] text-[#A8FF3E]/80 font-pixel uppercase">
+        <ShieldCheck className="w-3.5 h-3.5 text-[#A8FF3E]" />
+        <span>SERVER-VERIFIED SCORING SNAPSHOT V1.0</span>
       </div>
     </div>
   );
